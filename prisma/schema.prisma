@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model DinnerSlot {
+  id           Int    @id @default(autoincrement())
+  startAt      DateTime
+
+  reservations Reservation[]
+}
+
+enum ArrivalStatus {
+  WAITING
+  ARRIVED
+}
+
+model Reservation {
+  id          Int   @id @default(autoincrement())
+  roomNumber  Int
+  guestCount  Int
+  dinnerSlotId  Int
+  dinnerSlot  DinnerSlot @relation(fields: [dinnerSlotId], references: [id])
+  arrivalStatus ArrivalStatus @default(WAITING)
+}

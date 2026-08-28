@@ -1,0 +1,29 @@
+/* table.module.css */
+
+.container {
+  padding: 20px;
+}
+
+.table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.timeCell {
+  border: 1px solid #333;
+  background-color: rgb(203, 205, 207);
+  height: 120px;
+  width: 80px;
+  text-align: center;
+}
+
+.cell {
+  border: 1px solid #333;
+  height: 120px;
+  width: 120px;
+  text-align: center;
+}
+
+.cell:hover{
+  background-color: #dfdfdf;
+}
