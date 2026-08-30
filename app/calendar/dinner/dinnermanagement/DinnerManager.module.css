@@ -1,4 +1,14 @@
-
-.card {
+.page {
+    display: flex;
+    height: 100vh;
+}
+.list {
+    width: 250px;
+    background-color: rgb(200, 200, 200);
+}
+.timeSlot {
+    background-color: rgb(235, 235, 235);
+}
+.limit {
     display: flex;
 }
