@@ -22,11 +22,21 @@ export default function Home() {
             getSche()
       }, []);
 
+      useEffect(() => {   
+      if (scheData.length < 2) return;
+            const getReservation = async ()=> {
+                  const reservations = await fetchReservation(scheData[0].id, scheData[1].id);
+                  setReservationData(reservations)
+            }
+            getReservation()
+      }, [scheData]);
+
       return(
             <div>
                   {scheData.length > 0 &&(
                         <DinnerManager
                               scheData = {scheData}
+                              reservationData = {reservationData}
                         />
                   )}
                   

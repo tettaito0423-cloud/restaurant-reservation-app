@@ -35,18 +35,18 @@ export default function DinnerTable2({
                     <td className={styles.timeCell}>
                         {scheData[0].startAt}
                     </td>
-                    {Array.from({ length: reservations_1.length }).map((_, index) => ( 
+                    {reservations_1.map((reservation, index) => ( 
                         <td key={index}
                             className={styles.cell}
                             onClick={()=>{
                                 setSelectedCell(index+1);
                                 setModalType('detail'); 
                                 setDinnerSlotId(scheData[0].id)
-                                setReservationId(reservations_1[index].id)
+                                setReservationId(reservation.id)
                             }}
                         >
-                        <p>{reservations_1[index].roomNumber}</p>
-                        <p>{reservations_1[index].guestCount}名</p>
+                            <p>{reservation.roomNumber}</p>
+                            <p>{reservation.guestCount}名</p>
                         </td>
                     ))}
                     <td className={styles.cell}

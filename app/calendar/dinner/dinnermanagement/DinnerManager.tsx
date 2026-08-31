@@ -3,14 +3,22 @@ import {DinnerSlot} from '../../../../lib/getTimetable'
 import {Reservation} from '../../../../lib/getReservations'
 
 export default function DinnerManager({
-    scheData
+    scheData,
+    reservationData
 }:{
     scheData:DinnerSlot[];
+    reservationData:Reservation[];
 }) {
     return (
         <div className={styles.page}>
             <div className={styles.list}>
                 <input type="text" />
+                {reservationData.map((reservation, index)=>(
+                    <div className={styles.reservationSlot}>
+                        <p>{reservation.roomNumber}</p>
+                    </div>
+                ))}
+
             </div>
             <div className={styles.info}>
                 <div className={styles.card}>

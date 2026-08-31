@@ -3,8 +3,12 @@
     height: 100vh;
 }
 .list {
-    width: 250px;
+    width: 300px;
     background-color: rgb(200, 200, 200);
+}
+
+.reservationSlot {
+    background-color: darkseagreen;
 }
 .timeSlot {
     background-color: rgb(235, 235, 235);
