@@ -13,9 +13,10 @@ export default function DinnerManager({
         <div className={styles.page}>
             <div className={styles.list}>
                 <input type="text" />
-                {reservationData.map((reservation, index)=>(
-                    <div className={styles.reservationSlot}>
+                {reservationData.map((reservation)=>(
+                    <div className={styles.container}>
                         <p>{reservation.roomNumber}</p>
+                        <p>{reservation.guestCount}名</p>
                     </div>
                 ))}
 

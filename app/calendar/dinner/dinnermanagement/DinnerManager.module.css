@@ -1,5 +1,6 @@
 .page {
     display: flex;
+    gap: 10px;
     height: 100vh;
 }
 .list {
@@ -7,7 +8,9 @@
     background-color: rgb(200, 200, 200);
 }
 
-.reservationSlot {
+.container {
+    display: flex;
+    gap: 20px;
     background-color: darkseagreen;
 }
 .timeSlot {
@@ -15,4 +18,5 @@
 }
 .limit {
     display: flex;
+    gap: 20px;
 }
