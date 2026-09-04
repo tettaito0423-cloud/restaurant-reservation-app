@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function Modal({
-  date,
+date,
   onClose,
   onMoveRestaurant,
   onMoveFront,

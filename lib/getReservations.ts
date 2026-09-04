@@ -1,8 +1,14 @@
+import { DinnerSlot } from "./getTimetable"
+
 export type Reservation = {
   id: number
   dinnerSlotId: number;
   guestCount: number;
   roomNumber: number;
+  dinnerSlot: {
+    id: number;
+    startAt: string;
+  };
 }
 
 export const fetchReservation = async (dinnerSlotId_1: number, dinnerSlotId_2:number)=>{

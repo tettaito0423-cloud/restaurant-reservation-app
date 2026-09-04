@@ -25,7 +25,10 @@ export async function GET(req: Request){
                 {dinnerSlotId:Number(dinnerSlotId_1)},
                 {dinnerSlotId:Number(dinnerSlotId_2)},
             ]
-        }
+        },
+        include: {
+            dinnerSlot: true,
+        },
     });
     console.log(foundData)
     return NextResponse.json(foundData);

@@ -1,18 +1,19 @@
 'use client';
 
 import styles from '../../../Modal.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 
 type Props = {
     date: string;
     onClose: () => void;
-
+    getSche: () => void;
 };
 
 export default function Modal({
   date,
   onClose,
+  getSche
 }: Props) {
 
 
@@ -20,6 +21,7 @@ export default function Modal({
   const [first, setFirst] = useState("");
   const [second, setSecond] = useState("");
   const [third, setThird] = useState("");
+
 
 
   const handleSave = async () => {
@@ -35,7 +37,7 @@ export default function Modal({
         times,
       }),
     });
-    fetchSchedule(date)
+    getSche()
     onClose();
   };
 
