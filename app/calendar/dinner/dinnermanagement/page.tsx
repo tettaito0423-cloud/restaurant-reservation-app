@@ -36,14 +36,20 @@ export default function Home() {
 
       return(
             <div>
-                  <p>{date}</p>
+                  <div>
+                        <p>{date}</p>
+                        <div>
+                              <button onClick={() => {
+                                          router.push(`/`)
+                                    }}>
+                                    カレンダー
+                              </button>
+                        </div>
+                  </div>
                   {scheData.length > 0 &&(
                         <DinnerManager
                               scheData = {scheData}
                               reservationData = {reservationData}
-                              onMoveCalendar={() => {
-                                    router.push(`/`)
-                              }}
                         />
                   )}
                   

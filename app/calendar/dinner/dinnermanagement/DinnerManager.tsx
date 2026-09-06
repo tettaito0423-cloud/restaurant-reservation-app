@@ -5,19 +5,33 @@ import {Reservation} from '../../../../lib/getReservations'
 export default function DinnerManager({
     scheData,
     reservationData,
-    onMoveCalendar,
 }:{
     scheData:DinnerSlot[];
     reservationData:Reservation[];
-    onMoveCalendar:()=>void;
 }) {
     return (
         <div>
-            <div>
-                <button onClick={onMoveCalendar}>
-                    カレンダー
-                </button>
+            <div className={styles.timeCard}>
+                <div className={styles.timeSlot}>
+                    <p>{scheData[0].startAt}</p>
+                    <div className={styles.limit}>
+                        <p>1~2名</p>
+                        <p>3名</p>
+                        <p>4名~</p>
+                    </div>
+                </div>
+                <div className={styles.timeSlot}>
+                    <p>{scheData[1].startAt}</p>
+                    <div className={styles.limit}>
+                        <p>1~2名</p>
+                        <p>3名</p>
+                        <p>4名~</p>
+                    </div>
+                </div>
             </div>
+
+
+            //予約一覧の表示
             <div className={styles.page}>
                 <div className={styles.list}>
                     <input type="text" />
@@ -35,29 +49,6 @@ export default function DinnerManager({
                         </div>
                     ))}
 
-                </div>
-                <div className={styles.info}>
-                    <div className={styles.card}>
-                        <div className={styles.timeSlot}>
-                            <p>{scheData[0].startAt}</p>
-                            <div className={styles.limit}>
-                                <p>1~2名</p>
-                                <p>3名</p>
-                                <p>4名~</p>
-                            </div>
-                        </div>
-                        <div className={styles.timeSlot}>
-                            <p>{scheData[1].startAt}</p>
-                            <div className={styles.limit}>
-                                <p>1~2名</p>
-                                <p>3名</p>
-                                <p>4名~</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p>時間未定</p>
-                    </div>
                 </div>
             </div>
         </div>
