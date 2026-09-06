@@ -1,3 +1,9 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+
 .timeCard {
     display: flex;
 }
@@ -23,5 +29,6 @@
 .container {
     display: flex;
     gap: 20px;
+    border: 1px solid;
     background-color: darkseagreen;
 }
