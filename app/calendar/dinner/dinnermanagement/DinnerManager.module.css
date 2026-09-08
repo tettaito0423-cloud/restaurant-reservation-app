@@ -1,3 +1,21 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.timeCard {
+    display: flex;
+}
+.timeSlot {
+    gap:10px;
+    background-color: rgb(235, 235, 235);
+}
+.limit {
+    display: flex;
+    gap: 20px;
+}
+
 .page {
     display: flex;
     gap: 10px;
@@ -11,12 +29,6 @@
 .container {
     display: flex;
     gap: 20px;
+    border: 1px solid;
     background-color: darkseagreen;
-}
-.timeSlot {
-    background-color: rgb(235, 235, 235);
-}
-.limit {
-    display: flex;
-    gap: 20px;
 }

@@ -1,5 +1,5 @@
 'use client';
-
+import styles from './DinnerManager.module.css';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -36,14 +36,22 @@ export default function Home() {
 
       return(
             <div>
-                  <p>{date}</p>
+                  <div className={styles.header}>
+                        <p>{date}</p>
+                        <div>
+                              <button
+                                    className={styles.calendar} 
+                                    onClick={() => {
+                                          router.push(`/`)
+                                    }}>
+                                    カレンダー
+                              </button>
+                        </div>
+                  </div>
                   {scheData.length > 0 &&(
                         <DinnerManager
                               scheData = {scheData}
                               reservationData = {reservationData}
-                              onMoveCalendar={() => {
-                                    router.push(`/`)
-                              }}
                         />
                   )}
                   
