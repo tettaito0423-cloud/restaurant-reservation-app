@@ -2,7 +2,6 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import DetailModal from './DetailModal';
 import DinnerTable2 from './DinnerTable2';
 import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../lib/getReservations'
@@ -51,19 +50,6 @@ export default function DinnerPage() {
               setReservationId = {setReservationId}
             />
           </div>
-        )}
-
-
-        
-        {modalType === 'detail' &&(
-          <DetailModal
-            cellId = {selectedCell}
-            dinnerSlotId = {dinnerSlotId}
-            onClose={() => {setModalType(null)}}
-            reservationData = {reservationData}
-            reservationId = {reservationId}
-            setReservationId = {setReservationId}
-          />
         )}
       
     </div>

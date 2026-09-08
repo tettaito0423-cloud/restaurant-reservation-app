@@ -6,7 +6,6 @@ import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 
 type Props = {
-    cellId: number|null;
     dinnerSlotId: number|null;
     reservationId: number|null;
     reservationData: Reservation[]
@@ -41,20 +40,7 @@ export default function Modal({
         onClose();
     };
     console.log(reservationData)
-    const reservation = reservationData.find((item)=>
-        item.id === reservationId
-    );
 
-    useEffect(() => {
-        if (reservation) {
-            console.log(reservation)
-            setRoomNumber(reservation.roomNumber);
-            setPeopleNumber(reservation.guestCount);
-        } else {
-            setRoomNumber(null);
-            setPeopleNumber(null);
-        }
-    }, [reservation]);
 
 
     return(

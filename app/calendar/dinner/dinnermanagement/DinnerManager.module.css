@@ -3,10 +3,12 @@
     justify-content: space-between;
 }
 
-
+/*タイムテーブル*/
 .timeCard {
     display: flex;
+    gap: 10px;
 }
+
 .timeSlot {
     gap:10px;
     background-color: rgb(235, 235, 235);
@@ -16,19 +18,30 @@
     gap: 20px;
 }
 
-.page {
+/*予約一覧*/
+.table {
     display: flex;
-    gap: 10px;
-    height: 100vh;
+    margin-top: 10px;
 }
+
+.narrowDown{
+    width: 200px;
+    background-color: rgb(223, 223, 223);
+}
+
+.guestCount {
+    display: flex;
+    flex-direction: column;
+}
+
 .list {
     width: 400px;
-    background-color: rgb(200, 200, 200);
+
 }
 
 .container {
     display: flex;
     gap: 20px;
     border: 1px solid;
-    background-color: darkseagreen;
+
 }
