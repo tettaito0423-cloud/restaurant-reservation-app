@@ -7,18 +7,15 @@ import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 
 type Props = {
     dinnerSlotId: number|null;
-    reservationId: number|null;
     reservationData: Reservation[]
     onClose: ()=> void;
-    setReservationId: (id: number | null) => void;
 };
 
 export default function Modal({
     onClose,
     dinnerSlotId,
-    reservationId,
     reservationData,
-    setReservationId
+    
  }:Props){
 
     const [roomNumber, setRoomNumber] = useState<number| null>(null);;
@@ -49,9 +46,7 @@ export default function Modal({
             <button 
                 onClick={()=>{
                     onClose();
-                    setReservationId(null);
-                }}
-            >
+                }}>
                 X
             </button>
             <p>部屋番号</p>

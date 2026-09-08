@@ -5,8 +5,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../lib/getReservations'
-import DinnerManager from './DinnerManager';
-import CreateModal from './CreateModal';
+import DinnerManager from './DinnerManager'
+import NarrowDown from './NarrowDown'
+import CreateModal from './CreateModal'
 import DetailModal from './DetailModal'
 
 export default function Home() {
@@ -17,7 +18,6 @@ export default function Home() {
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
       const router = useRouter();
       const [dinnerSlotId, setDinnerSlotId] = useState<number| null>(null);
-      const [reservationId, setReservationId] = useState<number| null>(null);
 
 
       const getSche = async ()=> {
@@ -39,7 +39,6 @@ export default function Home() {
 
       return(
             <div>
-
                   <div className={styles.header}>
                         <p>{date}</p>
                         <button
@@ -58,50 +57,19 @@ export default function Home() {
                                     reservationData = {reservationData}
                               />
                               <div className={styles.table}>
-                                    <div className={styles.narrowDown}>
-                                          <p>絞り込み</p>
-                                          <input type="text" />
-                                          <p>人数</p>
-                                          <form 
-                                                className={styles.guestCount}
-                                                action="#" 
-                                                method="post"
-                                          >
-                                                <div>
-                                                      <input type="checkbox" name="belowTwo" value=""/>
-                                                      <label htmlFor="belowTwo">1~2人</label>
-                                                </div>
-                                                <div>
-                                                      <input type="checkbox" name="three" value=""/>
-                                                      <label htmlFor="three">3人</label>
-                                                </div>
-                                                <div>
-                                                      <input type="checkbox" name="fourOrMore" value=""/>
-                                                      <label htmlFor="fourOrMore">4人以上</label>
-                                                </div>
-                                          </form>
-                                          <p>時間</p>
-                                          <form 
-                                                action="#"
-                                                method='post'
-                                          >
-                                                <div>
-                                                      <input type="checkbox" name="first" value="" />
-                                                      <label htmlFor="first">{scheData[0].startAt}</label>
-                                                </div>
-                                          </form>
-                                    </div>
+
+                                    {/*絞り込み表示*/}
+                                    <NarrowDown
+                                          scheData = {scheData}
+                                    />
+
+                                    {/*予約一覧表示*/}
                                     <div className={styles.list}>
-                                          <button onClick={()=>setModalType('detail')}>追加</button>
-                                          {modalType === 'detail' &&(
-                                                <DetailModal
-                                                      dinnerSlotId = {dinnerSlotId}
-                                                      onClose={() => {setModalType(null)}}
-                                                      reservationData = {reservationData}
-                                                      reservationId = {reservationId}
-                                                      setReservationId = {setReservationId}
-                                                />
-                                          )}
+                                          <button 
+                                                onClick={()=>setModalType('detail')}
+                                          >
+                                                追加
+                                          </button>
                                           {reservationData.map((reservation)=>(
                                                 <div key={reservation.id} 
                                                 className={styles.container}>
@@ -115,6 +83,7 @@ export default function Home() {
                                                 </div>
                                           ))}
                                     </div>
+
                               </div>
                         </div>
 
@@ -133,6 +102,15 @@ export default function Home() {
                               date={date}
                               onClose={() => {setModalType(null)}}
                               getSche = {getSche}
+                        />
+                  )}
+
+                  {modalType === 'detail' &&(
+                        <DetailModal
+                              dinnerSlotId = {dinnerSlotId}
+                              onClose={() => {setModalType(null)}}
+                              reservationData = {reservationData}
+
                         />
                   )}
             </div>
