@@ -55,9 +55,6 @@ export default function DinnerManager({
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <p>時間未定</p>
-                    </div>
                 </div>
             </div>
         </div>
