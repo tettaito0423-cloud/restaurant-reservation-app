@@ -10,14 +10,17 @@ import NarrowDown from './NarrowDown'
 import CreateModal from './CreateModal'
 import DetailModal from './DetailModal'
 
+
+
 export default function Home() {
       const searchParams = useSearchParams();
-      const router = useRouter();
       const date = searchParams.get('date') ?? '';
       const [scheData, setScheData] = useState<DinnerSlot[]>([]);
       const [reservationData, setReservationData] = useState<Reservation[]>([]);
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
+      const router = useRouter();
       const [dinnerSlotId, setDinnerSlotId] = useState<number| null>(null);
+      const [chosenReservation, setChosenReservation] = useState<Reservation| null>(null);
 
 
       const getSche = async ()=> {
@@ -36,6 +39,8 @@ export default function Home() {
             }
             getReservation()
       }, [scheData]);
+
+
 
       return(
             <div>
@@ -73,7 +78,7 @@ export default function Home() {
                                           {reservationData.map((reservation)=>(
                                                 <div  key={reservation.id} 
                                                       className={styles.container}
-                                                      onClick={()=>setModalType('detail')}
+                                                      onClick={()=>setChosenReservation(reservation)}
                                                 >
                                                       <p>{reservation.roomNumber}号室</p>
                                                       <p>{reservation.guestCount}名</p>
@@ -110,8 +115,10 @@ export default function Home() {
                   {modalType === 'detail' &&(
                         <DetailModal
                               dinnerSlotId = {dinnerSlotId}
+                              chosenReservation = {chosenReservation}
                               onClose={() => {setModalType(null)}}
                               reservationData = {reservationData}
+
                         />
                   )}
             </div>

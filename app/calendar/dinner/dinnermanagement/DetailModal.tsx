@@ -6,6 +6,7 @@ import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 
 type Props = {
+    chosenReservation: Reservation| null;
     dinnerSlotId: number|null;
     reservationData: Reservation[]
     onClose: ()=> void;
@@ -13,6 +14,7 @@ type Props = {
 
 export default function Modal({
     onClose,
+    chosenReservation,
     dinnerSlotId,
     reservationData,
     
