@@ -12,11 +12,11 @@ import DetailModal from './DetailModal'
 
 export default function Home() {
       const searchParams = useSearchParams();
+      const router = useRouter();
       const date = searchParams.get('date') ?? '';
       const [scheData, setScheData] = useState<DinnerSlot[]>([]);
       const [reservationData, setReservationData] = useState<Reservation[]>([]);
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
-      const router = useRouter();
       const [dinnerSlotId, setDinnerSlotId] = useState<number| null>(null);
 
 
@@ -71,15 +71,17 @@ export default function Home() {
                                                 追加
                                           </button>
                                           {reservationData.map((reservation)=>(
-                                                <div key={reservation.id} 
-                                                className={styles.container}>
-                                                <p>{reservation.roomNumber}号室</p>
-                                                <p>{reservation.guestCount}名</p>
-                                                <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
-                                                            hour: "2-digit",
-                                                            minute: "2-digit",
-                                                      })}
-                                                </p>
+                                                <div  key={reservation.id} 
+                                                      className={styles.container}
+                                                      onClick={()=>setModalType('detail')}
+                                                >
+                                                      <p>{reservation.roomNumber}号室</p>
+                                                      <p>{reservation.guestCount}名</p>
+                                                      <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
+                                                                  hour: "2-digit",
+                                                                  minute: "2-digit",
+                                                            })}
+                                                      </p>
                                                 </div>
                                           ))}
                                     </div>
@@ -110,7 +112,6 @@ export default function Home() {
                               dinnerSlotId = {dinnerSlotId}
                               onClose={() => {setModalType(null)}}
                               reservationData = {reservationData}
-
                         />
                   )}
             </div>
