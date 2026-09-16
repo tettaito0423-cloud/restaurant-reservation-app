@@ -32,7 +32,7 @@ export default function Home() {
       }, []);
 
       useEffect(() => {   
-      if (scheData.length < 2) return;
+            if (scheData.length < 2) return;
             const getReservation = async ()=> {
                   const reservations = await fetchReservation(scheData[0].id, scheData[1].id);
                   setReservationData(reservations)
@@ -71,14 +71,20 @@ export default function Home() {
                                     {/*予約一覧表示*/}
                                     <div className={styles.list}>
                                           <button 
-                                                onClick={()=>setModalType('detail')}
+                                                onClick={()=>{
+                                                      setChosenReservation(null)
+                                                      setModalType('detail')
+                                                }}
                                           >
                                                 追加
                                           </button>
                                           {reservationData.map((reservation)=>(
                                                 <div  key={reservation.id} 
                                                       className={styles.container}
-                                                      onClick={()=>setChosenReservation(reservation)}
+                                                      onClick={()=>{
+                                                            setChosenReservation(reservation)
+                                                            setModalType('detail')
+                                                      }}
                                                 >
                                                       <p>{reservation.roomNumber}号室</p>
                                                       <p>{reservation.guestCount}名</p>
@@ -117,7 +123,6 @@ export default function Home() {
                               dinnerSlotId = {dinnerSlotId}
                               chosenReservation = {chosenReservation}
                               onClose={() => {setModalType(null)}}
-                              reservationData = {reservationData}
 
                         />
                   )}

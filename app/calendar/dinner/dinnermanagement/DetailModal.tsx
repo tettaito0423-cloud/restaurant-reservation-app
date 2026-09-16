@@ -8,7 +8,6 @@ import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 type Props = {
     chosenReservation: Reservation| null;
     dinnerSlotId: number|null;
-    reservationData: Reservation[]
     onClose: ()=> void;
 };
 
@@ -16,12 +15,12 @@ export default function Modal({
     onClose,
     chosenReservation,
     dinnerSlotId,
-    reservationData,
+
     
  }:Props){
 
-    const [roomNumber, setRoomNumber] = useState<number| null>(null);;
-    const [peopleNumber, setPeopleNumber] = useState<number| null>(null);;
+    const [roomNumber, setRoomNumber] = useState<number| null>(chosenReservation?.roomNumber ?? null);
+    const [peopleNumber, setPeopleNumber] = useState<number| null>((chosenReservation?.guestCount ?? null));
 
 
     const handleSave = async ()=>{
@@ -38,15 +37,14 @@ export default function Modal({
         });
         onClose();
     };
-    console.log(reservationData)
-
-
 
     return(
     <div className={styles.modalOverlay}>
         <div className={styles.modal}>
             <button 
                 onClick={()=>{
+                    setRoomNumber(null);
+                    setPeopleNumber(null);
                     onClose();
                 }}>
                 X
@@ -59,6 +57,7 @@ export default function Modal({
                     setRoomNumber(e.target.value === "" ? null : Number(e.target.value))
                 }
             />
+            
             <p>人数</p>
             <input
                 type="number"
@@ -67,10 +66,12 @@ export default function Modal({
                     setPeopleNumber(e.target.value === "" ? null : Number(e.target.value))
                 }
             />
+
+
             <button onClick={handleSave}>
                 登録
             </button>
         </div>
     </div>
     );
- }
+}

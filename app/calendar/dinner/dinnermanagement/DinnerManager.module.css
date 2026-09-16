@@ -43,5 +43,8 @@
     display: flex;
     gap: 20px;
     border: 1px solid;
+}
 
+.container:hover{
+    background-color: rgb(235, 235, 235);
 }
