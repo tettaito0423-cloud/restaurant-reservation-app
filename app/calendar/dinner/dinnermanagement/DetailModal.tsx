@@ -6,21 +6,19 @@ import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 
 type Props = {
-    chosenReservation: Reservation| null;
-    dinnerSlotId: number|null;
+    scheData: DinnerSlot[] | null;
+    chosenReservation: Reservation | null;
     onClose: ()=> void;
 };
 
 export default function Modal({
     onClose,
+    scheData,
     chosenReservation,
-    dinnerSlotId,
-
-    
  }:Props){
-
-    const [roomNumber, setRoomNumber] = useState<number| null>(chosenReservation?.roomNumber ?? null);
-    const [peopleNumber, setPeopleNumber] = useState<number| null>((chosenReservation?.guestCount ?? null));
+    const [dinnerSlotId, setDinnerSlotId] = useState<number | null>(chosenReservation?.dinnerSlotId ?? null);
+    const [roomNumber, setRoomNumber] = useState<number | null>(chosenReservation?.roomNumber ?? null);
+    const [peopleNumber, setPeopleNumber] = useState<number | null>((chosenReservation?.guestCount ?? null));
 
 
     const handleSave = async ()=>{
@@ -49,24 +47,45 @@ export default function Modal({
                 }}>
                 X
             </button>
-            <p>部屋番号</p>
-            <input
-                type="number"
-                value={roomNumber ?? ""}
-                onChange={(e) =>
-                    setRoomNumber(e.target.value === "" ? null : Number(e.target.value))
-                }
-            />
-            
-            <p>人数</p>
-            <input
-                type="number"
-                value = {peopleNumber ?? ""}
-                onChange={(e) =>
-                    setPeopleNumber(e.target.value === "" ? null : Number(e.target.value))
-                }
-            />
 
+            <div>
+                <p>部屋番号</p>
+                <input
+                    type="number"
+                    value={roomNumber ?? ""}
+                    onChange={(e) =>
+                        setRoomNumber(e.target.value === "" ? null : Number(e.target.value))
+                    }
+                />
+            </div>
+            <div>
+                <p>人数</p>
+                <input
+                    type="number"
+                    value = {peopleNumber ?? ""}
+                    onChange={(e) =>
+                        setPeopleNumber(e.target.value === "" ? null : Number(e.target.value))
+                    }
+                />
+            </div>
+
+            <div>
+                <p>タイムテーブル</p>
+                {scheData?.map((timeTable)=>(
+                    <div>
+                        <input
+                            type="radio"
+                            value={dinnerSlotId ?? ""}
+                            checked={dinnerSlotId === timeTable.id}
+                            onChange={()=>setDinnerSlotId(timeTable.id)}
+                        />
+                        <label>
+                            {timeTable.startAt}
+                        </label>
+                    </div>
+                ))}
+                
+            </div>
 
             <button onClick={handleSave}>
                 登録

@@ -18,16 +18,16 @@ export default function NarrowDown({
                 method="post"
             >
                 <div>
-                        <input type="checkbox" name="belowTwo" value=""/>
-                        <label htmlFor="belowTwo">1~2人</label>
+                    <input type="checkbox" name="belowTwo" value=""/>
+                    <label htmlFor="belowTwo">1~2人</label>
                 </div>
                 <div>
-                        <input type="checkbox" name="three" value=""/>
-                        <label htmlFor="three">3人</label>
+                    <input type="checkbox" name="three" value=""/>
+                    <label htmlFor="three">3人</label>
                 </div>
                 <div>
-                        <input type="checkbox" name="fourOrMore" value=""/>
-                        <label htmlFor="fourOrMore">4人以上</label>
+                    <input type="checkbox" name="fourOrMore" value=""/>
+                    <label htmlFor="fourOrMore">4人以上</label>
                 </div>
             </form>
             <p>時間</p>
@@ -35,10 +35,18 @@ export default function NarrowDown({
                 action="#"
                 method='post'
             >
-                <div>
-                        <input type="checkbox" name="first" value="" />
-                        <label htmlFor="first">{scheData[0].startAt}</label>
-                </div>
+
+            <div>
+                <p>タイムテーブル</p>
+                {scheData.map((dinnerSlot)=>(
+                    <div>
+                        <input type="radio" value="" />
+                        <label>
+                            {dinnerSlot.startAt}
+                        </label>
+                    </div>
+                ))}
+            </div>
             </form>
         </div>
     );

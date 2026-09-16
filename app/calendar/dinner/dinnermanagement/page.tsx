@@ -19,7 +19,6 @@ export default function Home() {
       const [reservationData, setReservationData] = useState<Reservation[]>([]);
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
       const router = useRouter();
-      const [dinnerSlotId, setDinnerSlotId] = useState<number| null>(null);
       const [chosenReservation, setChosenReservation] = useState<Reservation| null>(null);
 
 
@@ -120,8 +119,8 @@ export default function Home() {
 
                   {modalType === 'detail' &&(
                         <DetailModal
-                              dinnerSlotId = {dinnerSlotId}
                               chosenReservation = {chosenReservation}
+                              scheData = {scheData}
                               onClose={() => {setModalType(null)}}
 
                         />
