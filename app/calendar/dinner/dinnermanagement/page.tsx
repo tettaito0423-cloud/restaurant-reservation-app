@@ -30,12 +30,12 @@ export default function Home() {
             getSche()
       }, []);
 
-      useEffect(() => {   
-            if (scheData.length < 2) return;
-            const getReservation = async ()=> {
-                  const reservations = await fetchReservation(scheData[0].id, scheData[1].id);
+      const getReservation = async ()=> {
+            const reservations = await fetchReservation(scheData[0].id, scheData[1].id);
                   setReservationData(reservations)
             }
+      useEffect(() => {   
+            if (scheData.length < 2) return;
             getReservation()
       }, [scheData]);
 
@@ -52,50 +52,50 @@ export default function Home() {
                               }}>
                               カレンダー
                         </button>
+                        <button 
+                              onClick={()=>{
+                                    setChosenReservation(null)
+                                    setModalType('detail')
+                              }}
+                        >
+                              追加
+                        </button>
                   </div>
 
                   {scheData.length > 0 &&(
                         <div>
-                              <DinnerManager
-                                    scheData = {scheData}
-                                    reservationData = {reservationData}
-                              />
-                              <div className={styles.table}>
-
-                                    {/*絞り込み表示*/}
-                                    <NarrowDown
-                                          scheData = {scheData}
-                                    />
-
-                                    {/*予約一覧表示*/}
-                                    <div className={styles.list}>
-                                          <button 
-                                                onClick={()=>{
-                                                      setChosenReservation(null)
-                                                      setModalType('detail')
-                                                }}
-                                          >
-                                                追加
-                                          </button>
-                                          {reservationData.map((reservation)=>(
-                                                <div  key={reservation.id} 
-                                                      className={styles.container}
-                                                      onClick={()=>{
-                                                            setChosenReservation(reservation)
-                                                            setModalType('detail')
-                                                      }}
-                                                >
-                                                      <p>{reservation.roomNumber}号室</p>
-                                                      <p>{reservation.guestCount}名</p>
-                                                      <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
-                                                                  hour: "2-digit",
-                                                                  minute: "2-digit",
-                                                            })}
-                                                      </p>
-                                                </div>
-                                          ))}
+                              <div className={styles.page}>
+                                    <div className={styles.table}>
+                                          {/*絞り込み表示*/}
+                                          <NarrowDown
+                                                scheData = {scheData}
+                                          />
+                                          {/*予約一覧表示*/}
+                                          <div className={styles.list}>
+                                                {reservationData.map((reservation)=>(
+                                                      <div  key={reservation.id} 
+                                                            className={styles.container}
+                                                            onClick={()=>{
+                                                                  setChosenReservation(reservation)
+                                                                  setModalType('detail')
+                                                            }}
+                                                      >
+                                                            <p>{reservation.roomNumber}号室</p>
+                                                            <p>{reservation.guestCount}名</p>
+                                                            <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
+                                                                        hour: "2-digit",
+                                                                        minute: "2-digit",
+                                                                  })}
+                                                            </p>
+                                                      </div>
+                                                ))}
+                                          </div>
                                     </div>
-
+                                    {/*予約状況*/}
+                                    <DinnerManager
+                                          scheData = {scheData}
+                                          reservationData = {reservationData}
+                                    />
                               </div>
                         </div>
 
@@ -121,7 +121,10 @@ export default function Home() {
                         <DetailModal
                               chosenReservation = {chosenReservation}
                               scheData = {scheData}
-                              onClose={() => {setModalType(null)}}
+                              onClose={() => {
+                                    setModalType(null)
+                                    getReservation()
+                              }}
 
                         />
                   )}
