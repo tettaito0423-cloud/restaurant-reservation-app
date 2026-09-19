@@ -52,46 +52,46 @@ export default function Home() {
                               }}>
                               カレンダー
                         </button>
-                        <button 
-                              onClick={()=>{
-                                    setChosenReservation(null)
-                                    setModalType('detail')
-                              }}
-                        >
-                              追加
-                        </button>
                   </div>
 
                   {scheData.length > 0 &&(
-                        <div>
-                              <div className={styles.page}>
-                                    <div className={styles.table}>
-                                          {/*絞り込み表示*/}
-                                          <NarrowDown
-                                                scheData = {scheData}
-                                          />
-                                          {/*予約一覧表示*/}
-                                          <div className={styles.list}>
-                                                {reservationData.map((reservation)=>(
-                                                      <div  key={reservation.id} 
-                                                            className={styles.container}
-                                                            onClick={()=>{
-                                                                  setChosenReservation(reservation)
-                                                                  setModalType('detail')
-                                                            }}
-                                                      >
-                                                            <p>{reservation.roomNumber}号室</p>
-                                                            <p>{reservation.guestCount}名</p>
-                                                            <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
-                                                                        hour: "2-digit",
-                                                                        minute: "2-digit",
-                                                                  })}
-                                                            </p>
-                                                      </div>
-                                                ))}
-                                          </div>
+                        <div className={styles.page}>
+                              <div className={styles.table}>
+                                    <button
+                                          onClick={()=>{
+                                                setChosenReservation(null)
+                                                setModalType('detail')
+                                          }}
+                                    >
+                                          追加
+                                    </button>
+                                    {/*絞り込み表示*/}
+                                    <NarrowDown
+                                          scheData = {scheData}
+                                    />
+                                    {/*予約一覧表示*/}
+                                    <div className={styles.lists}>
+                                          {reservationData.map((reservation)=>(
+                                                <div  key={reservation.id} 
+                                                      className={styles.container}
+                                                      onClick={()=>{
+                                                            setChosenReservation(reservation)
+                                                            setModalType('detail')
+                                                      }}
+                                                >
+                                                      <p>{reservation.roomNumber}号室</p>
+                                                      <p>{reservation.guestCount}名</p>
+                                                      <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
+                                                                  hour: "2-digit",
+                                                                  minute: "2-digit",
+                                                            })}
+                                                      </p>
+                                                </div>
+                                          ))}
                                     </div>
-                                    {/*予約状況*/}
+                              </div>
+                              {/*予約状況*/}
+                              <div className={styles.timeTable}> 
                                     <DinnerManager
                                           scheData = {scheData}
                                           reservationData = {reservationData}
