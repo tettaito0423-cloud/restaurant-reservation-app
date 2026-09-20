@@ -28,6 +28,10 @@
   margin-bottom: 10px;
 }
 
+.selected{
+    background-color: #1193b3;
+}
+
 .btnLine {
   border-color: #1193b3;
   color: #1193b3;

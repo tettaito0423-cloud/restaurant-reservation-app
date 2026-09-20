@@ -20,6 +20,7 @@ export default function Home() {
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
       const router = useRouter();
       const [chosenReservation, setChosenReservation] = useState<Reservation| null>(null);
+      const [selectedColor, setSelectedColor] = useState(false);
 
 
       const getSche = async ()=> {
@@ -65,11 +66,12 @@ export default function Home() {
                                     >
                                           追加
                                     </button>
-                                    {/*絞り込み表示*/}
+                                    {/*絞り込み*/}
                                     <NarrowDown
                                           scheData = {scheData}
+                                          setSelected = {setSelectedColor}
                                     />
-                                    {/*予約一覧表示*/}
+                                    {/*予約一覧*/}
                                     <div className={styles.lists}>
                                           {reservationData.map((reservation)=>(
                                                 <div  key={reservation.id} 
