@@ -20,7 +20,7 @@ export default function Home() {
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
       const router = useRouter();
       const [chosenReservation, setChosenReservation] = useState<Reservation| null>(null);
-      const [selectedColor, setSelectedColor] = useState(false);
+      const [selectedDinnerSlotId, setSelectedDinnerSlotId] = useState<number | null>(null);
 
 
       const getSche = async ()=> {
@@ -39,6 +39,13 @@ export default function Home() {
             if (scheData.length < 2) return;
             getReservation()
       }, [scheData]);
+
+      {/*selectedDinnerSlotIdと同じdinnerrSlotIdの予約をさがす*/}
+      const selectReservation = ()=>{
+            const selectedReservation = reservationData.map((reservation)=>{
+                  reservation.dinnerSlotId === selectedDinnerSlotId
+            })
+      }
 
 
 
@@ -69,7 +76,7 @@ export default function Home() {
                                     {/*絞り込み*/}
                                     <NarrowDown
                                           scheData = {scheData}
-                                          setSelected = {setSelectedColor}
+                                          setSelectedDinnerSlotId = {setSelectedDinnerSlotId}
                                     />
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>

@@ -4,19 +4,19 @@ import {Reservation} from '../../../../lib/getReservations'
 
 export default function NarrowDown({
     scheData,
-    setSelected,
+    setSelectedDinnerSlotId,
 }:{
     scheData: DinnerSlot[];
-    setSelected: any;
+    setSelectedDinnerSlotId: any;
 }) {
     return (
         <div className={styles.narrowDown}>
             <div>
                 {scheData.map((dinnerSlot)=>(
                     <button 
-                        className={`${styles.btn} ${styles.btnLine} ${}`}
+                        className={`${styles.btn} ${styles.btnLine}`}
                         key = {dinnerSlot.id}
-                        onClick={()=>setSelected()}
+                        onClick={()=>setSelectedDinnerSlotId(dinnerSlot.id)}
                     >
                         {dinnerSlot.startAt}
                     </button>
