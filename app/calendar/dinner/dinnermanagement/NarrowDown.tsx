@@ -5,9 +5,11 @@ import {Reservation} from '../../../../lib/getReservations'
 export default function NarrowDown({
     scheData,
     updateSelectedDinnerSlotId,
+    updateSelectedGuestCount,
     }:{
     scheData: DinnerSlot[];
     updateSelectedDinnerSlotId: any;
+    updateSelectedGuestCount: any;
 }) {
     return (
         <div className={styles.narrowDown}>
@@ -25,7 +27,13 @@ export default function NarrowDown({
                 ))}
             </div>
             <div>
-                <button className={`${styles.btn} ${styles.btnLine}`}>
+                <button 
+                    className={`${styles.btn} ${styles.btnLine}`}
+                    key = {2}
+                    onClick={()=>{
+                        updateSelectedGuestCount(1, 2)
+                    }}
+                >
                     1・2人
                 </button>
                 <button className={`${styles.btn} ${styles.btnLine}`}>

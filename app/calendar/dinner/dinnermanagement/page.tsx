@@ -21,11 +21,20 @@ export default function Home() {
       const router = useRouter();
       const [reservationDetail, setReservationDetail] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
+      const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([])
+
       const selectedReservations = reservationData.filter((reservation)=>{
             if (selectedDinnerSlotIds.length === 0) {
                   return reservationData
             } else{
                   return selectedDinnerSlotIds.includes(reservation.dinnerSlotId)
+            }
+      });
+      const resultReservation = selectedReservations.filter((reservation)=>{
+            if (selectedGuestCount.length === 0) {
+                  return selectedReservations
+            } else {
+
             }
       });
       console.log("selectedDinnerSlotIds", selectedDinnerSlotIds)
@@ -63,13 +72,24 @@ export default function Home() {
                   setSelectedDinnerSlotId(
                         selectedDinnerSlotIds.filter((dinnerSlotId)=>(
                               e !== dinnerSlotId
-                  )));
+                        ))
+                  );
             } else {
                   setSelectedDinnerSlotId([...selectedDinnerSlotIds, e]);
             }
       };
 
-
+      const updateSelectedGuestCount = (i:number, a:number) =>{
+            if (selectedGuestCount.includes(i, a)) {
+                  setSelectedGuestCount(
+                        selectedGuestCount.filter((guestCount)=>(
+                              i !== guestCount || a !== guestCount
+                        ))
+                  );
+            } else {
+                  setSelectedGuestCount([...selectedGuestCount, i])
+            }
+      };
 
 
 
@@ -101,6 +121,7 @@ export default function Home() {
                                     <NarrowDown
                                           scheData = {scheData}
                                           updateSelectedDinnerSlotId = {updateSelectedDinnerSlotId}
+                                          updateSelectedGuestCount = {updateSelectedGuestCount}
                                     />
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>
