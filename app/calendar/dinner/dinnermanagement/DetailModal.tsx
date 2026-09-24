@@ -7,18 +7,18 @@ import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 
 type Props = {
     scheData: DinnerSlot[] | null;
-    chosenReservation: Reservation | null;
+    reservationDetail: Reservation | null;
     onClose: ()=> void;
 };
 
 export default function Modal({
     onClose,
     scheData,
-    chosenReservation,
+    reservationDetail,
  }:Props){
-    const [dinnerSlotId, setDinnerSlotId] = useState<number | null>(chosenReservation?.dinnerSlotId ?? null);
-    const [roomNumber, setRoomNumber] = useState<number | null>(chosenReservation?.roomNumber ?? null);
-    const [peopleNumber, setPeopleNumber] = useState<number | null>((chosenReservation?.guestCount ?? null));
+    const [dinnerSlotId, setDinnerSlotId] = useState<number | null>(reservationDetail?.dinnerSlotId ?? null);
+    const [roomNumber, setRoomNumber] = useState<number | null>(reservationDetail?.roomNumber ?? null);
+    const [peopleNumber, setPeopleNumber] = useState<number | null>((reservationDetail?.guestCount ?? null));
 
 
     const handleSave = async ()=>{

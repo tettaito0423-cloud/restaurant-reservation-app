@@ -50,7 +50,6 @@ export async function GET(req: Request){
       const minute = String(item.startAt.getMinutes()).padStart(2, '0');
       return {...item, startAt:`${hour}:${minute}`};
     })
-    console.log(newData)
     return NextResponse.json(newData);
   };
 

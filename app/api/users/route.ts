@@ -10,7 +10,6 @@ export async function POST(req: Request) {
             guestCount: peopleNumber,
         },
     });
-    console.log(result)
     return NextResponse.json(result);
 }
 
@@ -30,6 +29,5 @@ export async function GET(req: Request){
             dinnerSlot: true,
         },
     });
-    console.log(foundData)
     return NextResponse.json(foundData);
 }

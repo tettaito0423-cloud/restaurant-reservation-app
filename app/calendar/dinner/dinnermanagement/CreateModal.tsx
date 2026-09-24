@@ -7,13 +7,13 @@ import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 type Props = {
     date: string;
     onClose: () => void;
-    getSche: () => void;
+    getSchedule: () => void;
 };
 
 export default function Modal({
   date,
   onClose,
-  getSche
+  getSchedule
 }: Props) {
 
 
@@ -37,7 +37,7 @@ export default function Modal({
         times,
       }),
     });
-    getSche()
+    getSchedule()
     onClose();
   };
 
