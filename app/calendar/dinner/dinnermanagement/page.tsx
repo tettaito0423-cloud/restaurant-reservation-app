@@ -21,6 +21,14 @@ export default function Home() {
       const router = useRouter();
       const [reservationDetail, setReservationDetail] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
+      const selectedReservations = reservationData.filter((reservation)=>{
+            if (selectedDinnerSlotIds.length === 0) {
+                  return reservationData
+            } else{
+                  return selectedDinnerSlotIds.includes(reservation.dinnerSlotId)
+            }
+      });
+      console.log("selectedDinnerSlotIds", selectedDinnerSlotIds)
 
 
 
@@ -28,29 +36,41 @@ export default function Home() {
             const schedule = await fetchSchedule(date);
             setScheData(schedule);
       };
+
       useEffect(() => {
             getSchedule()
+            scheData.map((e)=>(
+                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.id])
+            ));
       }, []);
 
       const getReservation = async ()=> {
             const reservations = await fetchReservation(scheData[0].id, scheData[1].id);
             setReservationData(reservations);
       };
+
       useEffect(() => {   
             if (scheData.length < 2) return;
             getReservation();
       }, [scheData]);
 
-      const addSelectedDinnerSlotId = (e:number) => {
-            setSelectedDinnerSlotId([...selectedDinnerSlotIds, e]);
-      }
+
+      {/*絞り込み機能 */}
+      {/*もしselectedDinnerSlotIdsの中にすでに含まれているidなら削除する。
+            含まれていないなら追加する。*/}
+      const updateSelectedDinnerSlotId = (e:number) => {
+            if (selectedDinnerSlotIds.includes(e)) {
+                  setSelectedDinnerSlotId(
+                        selectedDinnerSlotIds.filter((dinnerSlotId)=>(
+                              e !== dinnerSlotId
+                  )));
+            } else {
+                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e]);
+            }
+      };
 
 
-      {/*クリックしたら関数が動く。
-            ->scheDataのidと同じdinnerSlotIdの予約*/}
-      const selectedReservations = reservationData.filter((reservation)=>{
-            return selectedDinnerSlotIds.includes(reservation.dinnerSlotId)
-      });
+
 
 
       return(
@@ -80,7 +100,7 @@ export default function Home() {
                                     {/*絞り込み*/}
                                     <NarrowDown
                                           scheData = {scheData}
-                                          addSelectedDinnerSlotId = {addSelectedDinnerSlotId}
+                                          updateSelectedDinnerSlotId = {updateSelectedDinnerSlotId}
                                     />
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>
