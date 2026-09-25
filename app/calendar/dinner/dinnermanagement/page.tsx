@@ -21,7 +21,11 @@ export default function Home() {
       const router = useRouter();
       const [reservationDetail, setReservationDetail] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
-      const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([])
+      const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([]);
+
+      const smallParty = 2;
+      const mediumParty = 3;
+      const largeParty = 4;
 
       const selectedReservations = reservationData.filter((reservation)=>{
             if (selectedDinnerSlotIds.length === 0) {
@@ -32,12 +36,19 @@ export default function Home() {
       });
       const resultReservation = selectedReservations.filter((reservation)=>{
             if (selectedGuestCount.length === 0) {
-                  return selectedReservations
+                  return true
             } else {
-
+                  return selectedGuestCount.includes(reservation.guestCount)
             }
       });
+
+      {/*mapメソッドで、2の場合は2以下の予約を取得し、*/}
+      const result = selectedReservations.filter((resevation)=>{
+            return resevation.guestCount <= smallParty
+      });
+      console.log("result", result)
       console.log("selectedDinnerSlotIds", selectedDinnerSlotIds)
+      console.log("selectedGuestCount", selectedGuestCount)
 
 
 
@@ -80,14 +91,14 @@ export default function Home() {
       };
 
       const updateSelectedGuestCount = (i:number, a:number) =>{
-            if (selectedGuestCount.includes(i, a)) {
+            if (selectedGuestCount.includes(i || a)) {
                   setSelectedGuestCount(
                         selectedGuestCount.filter((guestCount)=>(
-                              i !== guestCount || a !== guestCount
+                              i !== guestCount && a !== guestCount
                         ))
                   );
             } else {
-                  setSelectedGuestCount([...selectedGuestCount, i])
+                  setSelectedGuestCount([...selectedGuestCount, i, a])
             }
       };
 
@@ -125,7 +136,7 @@ export default function Home() {
                                     />
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>
-                                          {selectedReservations.map((reservation)=>(
+                                          {resultReservation.map((reservation)=>(
                                                 <div  key={reservation.id} 
                                                       className={styles.container}
                                                       onClick={()=>{
