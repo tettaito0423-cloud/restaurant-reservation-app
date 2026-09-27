@@ -6,17 +6,27 @@ export default function NarrowDown({
     scheData,
     updateSelectedDinnerSlotId,
     updateSelectedGuestCount,
+    selectedDinnerSlotIds,
+    selectedGuestCount,
+    smallParty, 
+    mediumParty,
+    largeParty,
     }:{
     scheData: DinnerSlot[];
     updateSelectedDinnerSlotId: any;
     updateSelectedGuestCount: any;
+    selectedDinnerSlotIds: number[];
+    selectedGuestCount: number[];
+    smallParty: number;
+    mediumParty: number;
+    largeParty: number;
 }) {
     return (
         <div className={styles.narrowDown}>
             <div>
                 {scheData.map((dinnerSlot)=>(
                     <button 
-                        className={`${styles.btn} ${styles.btnLine}`}
+                        className={`${styles.btn} ${styles.btnLine} ${selectedDinnerSlotIds.includes(dinnerSlot.id) ? styles.selected : ""}`}
                         key = {dinnerSlot.id}
                         onClick={()=>{
                             updateSelectedDinnerSlotId(dinnerSlot.id)
@@ -28,18 +38,30 @@ export default function NarrowDown({
             </div>
             <div>
                 <button 
-                    className={`${styles.btn} ${styles.btnLine}`}
-                    key = {2}
+                    className={`${styles.btn} ${styles.btnLine} ${selectedGuestCount.includes(smallParty) ? styles.selected : ""}`}
+                    key = {smallParty}
                     onClick={()=>{
-                        updateSelectedGuestCount(1, 2)
+                        updateSelectedGuestCount(smallParty)
                     }}
                 >
                     1・2人
                 </button>
-                <button className={`${styles.btn} ${styles.btnLine}`}>
+                <button
+                    className={`${styles.btn} ${styles.btnLine} ${selectedGuestCount.includes(mediumParty) ? styles.selected : ""}`}
+                    key = {mediumParty}
+                    onClick={()=>{
+                        updateSelectedGuestCount(mediumParty)
+                    }}
+                >
                     3人
                 </button>
-                <button className={`${styles.btn} ${styles.btnLine}`}>
+                <button 
+                    className={`${styles.btn} ${styles.btnLine} ${selectedGuestCount.includes(largeParty) ? styles.selected : ""}`}
+                    key = {largeParty} 
+                    onClick={()=>{
+                        updateSelectedGuestCount(largeParty)
+                    }}  
+                >
                     4人
                 </button>
             </div>

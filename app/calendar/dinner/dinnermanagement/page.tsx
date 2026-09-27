@@ -22,14 +22,13 @@ export default function Home() {
       const [reservationDetail, setReservationDetail] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
       const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([]);
-
       const smallParty = 2;
       const mediumParty = 3;
       const largeParty = 4;
 
       const selectedReservations = reservationData.filter((reservation)=>{
             if (selectedDinnerSlotIds.length === 0) {
-                  return reservationData
+                  return true
             } else{
                   return selectedDinnerSlotIds.includes(reservation.dinnerSlotId)
             }
@@ -38,17 +37,21 @@ export default function Home() {
             if (selectedGuestCount.length === 0) {
                   return true
             } else {
-                  return selectedGuestCount.includes(reservation.guestCount)
+                  return selectedGuestCount.some((guestCount)=>{
+                        if (guestCount === smallParty) {
+                              return reservation.guestCount <= smallParty
+                        } else if (guestCount === mediumParty) {
+                              return reservation.guestCount === mediumParty
+                        } else  {
+                              return reservation.guestCount >= largeParty
+                        }
+                  })
             }
       });
 
-      {/*mapメソッドで、2の場合は2以下の予約を取得し、*/}
-      const result = selectedReservations.filter((resevation)=>{
-            return resevation.guestCount <= smallParty
-      });
-      console.log("result", result)
       console.log("selectedDinnerSlotIds", selectedDinnerSlotIds)
       console.log("selectedGuestCount", selectedGuestCount)
+      console.log("resultReservation", resultReservation)
 
 
 
@@ -76,8 +79,8 @@ export default function Home() {
 
 
       {/*絞り込み機能 */}
-      {/*もしselectedDinnerSlotIdsの中にすでに含まれているidなら削除する。
-            含まれていないなら追加する。*/}
+
+      {/*夕食時間絞り込み */}
       const updateSelectedDinnerSlotId = (e:number) => {
             if (selectedDinnerSlotIds.includes(e)) {
                   setSelectedDinnerSlotId(
@@ -89,18 +92,20 @@ export default function Home() {
                   setSelectedDinnerSlotId([...selectedDinnerSlotIds, e]);
             }
       };
-
-      const updateSelectedGuestCount = (i:number, a:number) =>{
-            if (selectedGuestCount.includes(i || a)) {
+      {/*人数絞り込み */}
+      const updateSelectedGuestCount = (i:number) =>{
+            if (selectedGuestCount.includes(i)) {
                   setSelectedGuestCount(
                         selectedGuestCount.filter((guestCount)=>(
-                              i !== guestCount && a !== guestCount
+                              i !== guestCount
                         ))
                   );
             } else {
-                  setSelectedGuestCount([...selectedGuestCount, i, a])
+                  setSelectedGuestCount([...selectedGuestCount, i])
             }
       };
+
+      {/*ボタン色変更 */}
 
 
 
@@ -133,6 +138,11 @@ export default function Home() {
                                           scheData = {scheData}
                                           updateSelectedDinnerSlotId = {updateSelectedDinnerSlotId}
                                           updateSelectedGuestCount = {updateSelectedGuestCount}
+                                          selectedDinnerSlotIds = {selectedDinnerSlotIds}
+                                          selectedGuestCount = {selectedGuestCount}
+                                          smallParty = {smallParty}
+                                          mediumParty = {mediumParty}
+                                          largeParty = {largeParty}
                                     />
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>

@@ -28,17 +28,19 @@
     margin-bottom: 10px;
 }
 
-.selected{
-    background-color: #1193b3;
-}
-
 .btnLine {
-  border-color: #1193b3;
-  color: #1193b3;
+  border-color: #00afdb;
+  color: #00afdb;
 }
 
 .btnLine:hover {
-  background-color: #e1eef1;
+  background-color: #00afdb;
+  color: #ffffff;
+}
+
+.selected{
+    background-color: #00afdb;
+    color: #ffffff;
 }
 
 
