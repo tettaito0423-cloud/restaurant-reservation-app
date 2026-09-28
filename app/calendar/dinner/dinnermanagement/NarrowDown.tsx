@@ -22,11 +22,11 @@ export default function NarrowDown({
     largeParty: number;
 }) {
     return (
-        <div className={styles.narrowDown}>
+        <div className={styles.btnContainer}>
             <div>
                 {scheData.map((dinnerSlot)=>(
                     <button 
-                        className={`${styles.btn} ${styles.btnLine} ${selectedDinnerSlotIds.includes(dinnerSlot.id) ? styles.selected : ""}`}
+                        className={`${styles.btn} ${styles.btnLine} ${styles.dinnerSlotBtn} ${selectedDinnerSlotIds.includes(dinnerSlot.id) ? styles.selected : ""}`}
                         key = {dinnerSlot.id}
                         onClick={()=>{
                             updateSelectedDinnerSlotId(dinnerSlot.id)
@@ -62,7 +62,7 @@ export default function NarrowDown({
                         updateSelectedGuestCount(largeParty)
                     }}  
                 >
-                    4人
+                    4人以上
                 </button>
             </div>
         </div>

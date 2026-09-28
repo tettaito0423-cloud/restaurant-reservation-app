@@ -105,12 +105,11 @@ export default function Home() {
             }
       };
 
-      {/*ボタン色変更 */}
 
 
 
       return(
-            <div>
+            <div className = {styles.page}>
                   <div className={styles.header}>
                         <p>{date}</p>
                         <button
@@ -123,7 +122,7 @@ export default function Home() {
                   </div>
 
                   {scheData.length > 0 &&(
-                        <div className={styles.page}>
+                        <div>
                               <div className={styles.table}>
                                     <button
                                           onClick={()=>{
@@ -133,6 +132,8 @@ export default function Home() {
                                     >
                                           追加
                                     </button>
+
+
                                     {/*絞り込み*/}
                                     <NarrowDown
                                           scheData = {scheData}
@@ -144,6 +145,8 @@ export default function Home() {
                                           mediumParty = {mediumParty}
                                           largeParty = {largeParty}
                                     />
+
+
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>
                                           {resultReservation.map((reservation)=>(
@@ -166,10 +169,13 @@ export default function Home() {
                                     </div>
                               </div>
                               {/*予約状況*/}
-                              <div className={styles.timeTable}> 
+                              <div className={styles.timeTables}> 
                                     <DinnerManager
                                           scheData = {scheData}
                                           reservationData = {reservationData}
+                                          smallParty = {smallParty}
+                                          mediumParty = {mediumParty}
+                                          largeParty = {largeParty}
                                     />
                               </div>
                         </div>

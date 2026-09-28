@@ -75,6 +75,7 @@ export default function Modal({
                     <div>
                         <input
                             type="radio"
+                            key={timeTable.id}
                             value={dinnerSlotId ?? ""}
                             checked={dinnerSlotId === timeTable.id}
                             onChange={()=>setDinnerSlotId(timeTable.id)}
