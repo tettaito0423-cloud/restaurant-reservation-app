@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../lib/getReservations'
 import DinnerManager from './DinnerManager'
+import SelectPlan from './SelectPlan'
 import NarrowDown from './NarrowDown'
 import CreateModal from './CreateModal'
 import DetailModal from './DetailModal'
@@ -132,6 +133,12 @@ export default function Home() {
                                     >
                                           追加
                                     </button>
+
+
+                                    {/*プラン別予約一覧*/}
+                                    <SelectPlan
+                                          reservationData = {reservationData}
+                                    />
 
 
                                     {/*絞り込み*/}
