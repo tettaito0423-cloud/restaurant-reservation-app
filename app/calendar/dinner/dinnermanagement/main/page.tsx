@@ -3,8 +3,8 @@ import styles from './DinnerManager.module.css';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
-import {fetchReservation, Reservation} from '../../../../lib/getReservations'
+import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
+import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import DinnerManager from './DinnerManager'
 import SelectPlan from './SelectPlan'
 import NarrowDown from './NarrowDown'
@@ -13,46 +13,24 @@ import DetailModal from './DetailModal'
 
 
 
+
 export default function Home() {
       const searchParams = useSearchParams();
       const date = searchParams.get('date') ?? '';
+      const router = useRouter();
       const [scheData, setScheData] = useState<DinnerSlot[]>([]);
       const [reservationData, setReservationData] = useState<Reservation[]>([]);
       const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
-      const router = useRouter();
-      const [reservationDetail, setReservationDetail] = useState<Reservation| null>(null);
+      const [reservation, setReservation] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
       const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([]);
       const smallParty = 2;
       const mediumParty = 3;
       const largeParty = 4;
 
-      const selectedReservations = reservationData.filter((reservation)=>{
-            if (selectedDinnerSlotIds.length === 0) {
-                  return true
-            } else{
-                  return selectedDinnerSlotIds.includes(reservation.dinnerSlotId)
-            }
-      });
-      const resultReservation = selectedReservations.filter((reservation)=>{
-            if (selectedGuestCount.length === 0) {
-                  return true
-            } else {
-                  return selectedGuestCount.some((guestCount)=>{
-                        if (guestCount === smallParty) {
-                              return reservation.guestCount <= smallParty
-                        } else if (guestCount === mediumParty) {
-                              return reservation.guestCount === mediumParty
-                        } else  {
-                              return reservation.guestCount >= largeParty
-                        }
-                  })
-            }
-      });
 
       console.log("selectedDinnerSlotIds", selectedDinnerSlotIds)
       console.log("selectedGuestCount", selectedGuestCount)
-      console.log("resultReservation", resultReservation)
 
 
 
@@ -69,7 +47,7 @@ export default function Home() {
       }, []);
 
       const getReservation = async ()=> {
-            const reservations = await fetchReservation(scheData[0].id, scheData[1].id);
+            const reservations = await fetchReservation(date);
             setReservationData(reservations);
       };
 
@@ -127,7 +105,7 @@ export default function Home() {
                               <div className={styles.table}>
                                     <button
                                           onClick={()=>{
-                                                setReservationDetail(null)
+                                                setReservation(null)
                                                 setModalType('detail')
                                           }}
                                     >
@@ -156,23 +134,8 @@ export default function Home() {
 
                                     {/*予約一覧*/}
                                     <div className={styles.lists}>
-                                          {resultReservation.map((reservation)=>(
-                                                <div  key={reservation.id} 
-                                                      className={styles.container}
-                                                      onClick={()=>{
-                                                            setReservationDetail(reservation)
-                                                            setModalType('detail')
-                                                      }}
-                                                >
-                                                      <p>{reservation.roomNumber}号室</p>
-                                                      <p>{reservation.guestCount}名</p>
-                                                      <p>{new Date(reservation.dinnerSlot.startAt).toLocaleTimeString("ja-JP", {
-                                                                  hour: "2-digit",
-                                                                  minute: "2-digit",
-                                                            })}
-                                                      </p>
-                                                </div>
-                                          ))}
+                                          
+                                          
                                     </div>
                               </div>
                               {/*予約状況*/}
@@ -207,11 +170,9 @@ export default function Home() {
 
                   {modalType === 'detail' &&(
                         <DetailModal
-                              reservationDetail = {reservationDetail}
-                              scheData = {scheData}
+                              date = {date}
                               onClose={() => {
                                     setModalType(null)
-                                    getReservation()
                               }}
 
                         />

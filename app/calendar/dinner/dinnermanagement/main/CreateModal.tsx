@@ -1,8 +1,8 @@
 'use client';
 
-import styles from '../../../Modal.module.css';
+import styles from '../../../../Modal.module.css';
 import { useState, useEffect } from 'react';
-import {fetchSchedule, DinnerSlot} from '../../../../lib/getTimetable'
+import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
 
 type Props = {
     date: string;

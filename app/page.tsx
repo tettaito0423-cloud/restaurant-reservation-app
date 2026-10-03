@@ -54,7 +54,7 @@ export default function Home() {
             router.push(`/calendar/dinner/dinnertable?date=${date}`)
           }}
           onMoveFront = {()=>{
-            router.push(`/calendar/dinner/dinnermanagement?date=${date}`)
+            router.push(`/calendar/dinner/dinnermanagement/main?date=${date}`)
           }}
         />
       )}

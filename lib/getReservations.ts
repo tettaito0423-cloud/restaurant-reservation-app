@@ -1,19 +1,13 @@
 import { DinnerSlot } from "./getTimetable"
 
 export type Reservation = {
-  id: number
-  dinnerSlotId: number;
-  guestCount: number;
-  roomNumber: number;
-  dinnerSlot: {
-    id: number;
-    startAt: string;
-  };
+  id: number;
+  
 }
 
-export const fetchReservation = async (dinnerSlotId_1: number, dinnerSlotId_2:number)=>{
+export const fetchReservation = async (date: string)=>{
     const res = await fetch(
-      `/api/users?dinnerSlotId_1=${dinnerSlotId_1}&dinnerSlotId_2=${dinnerSlotId_2}`
+      `/api/users?date=${date}`
     )
     const json:Reservation[] = await res.json();
     return json

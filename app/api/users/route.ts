@@ -2,31 +2,49 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
-    const {dinnerSlotId, roomNumber, peopleNumber} =await req.json();
-    const result = await prisma.reservation.create({
+    const {
+        date,
+        roomNumber, 
+        adultCount, 
+        childMealCount,
+        childNoMealCount, 
+        checkin, 
+        checkout, 
+        dietaryRestrictions, 
+        comment,
+    } = await req.json();
+    const reservation = await prisma.reservation.create({
         data:{
-            dinnerSlotId,
             roomNumber: roomNumber,
-            guestCount: peopleNumber,
+            adultCount: adultCount,
+            childMealCount: childMealCount,
+            childNoMealCount: childNoMealCount,
+            checkin: checkin,
+            checkout: checkout,
+            dietaryRestrictions: dietaryRestrictions,
+            comment: comment,
         },
+        
     });
-    return NextResponse.json(result);
+    return NextResponse.json(reservation);
 }
 
 export async function GET(req: Request){
     const { searchParams } = new URL(req.url);
-    const dinnerSlotId_1 = searchParams.get("dinnerSlotId_1")
-    const dinnerSlotId_2 = searchParams.get("dinnerSlotId_2")
+    const date = searchParams.get("date")
 
-    const foundData = await prisma.reservation.findMany({
+    const foundData = await prisma.stay.findMany({
         where: {
-            OR:[
-                {dinnerSlotId:Number(dinnerSlotId_1)},
-                {dinnerSlotId:Number(dinnerSlotId_2)},
-            ]
+            date: {
+                gte: new Date(`${date}T00:00:00+09:00`),
+                lt: new Date(`${date}T23:59:59.999+09:00`),
+            }
         },
         include: {
-            dinnerSlot: true,
+            reservation: true,
+            meal: {
+                dinnerSlot: true
+            },
         },
     });
     return NextResponse.json(foundData);
