@@ -19,6 +19,7 @@ export async function POST(req: Request) {
   });
 
   //データを登録
+  //フルコースのスケジュールを登録したら自動でハーフコース（18:15）も作らる。
   const data = times.map((time:string)=>({
     startAt: new Date(`${date}T${time}:00`),
   }))
