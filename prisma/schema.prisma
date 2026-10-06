@@ -42,7 +42,7 @@ model Stay {
   date          DateTime
   reservation   Reservation @relation(fields: [reservationId], references: [id])
   dinners       Dinner[]
-  Breakfasts    Breakfast[]
+  breakfasts    Breakfast[]
 }
 
 model Dinner {
