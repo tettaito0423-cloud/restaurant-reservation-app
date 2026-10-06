@@ -42,8 +42,11 @@ export async function GET(req: Request){
         },
         include: {
             reservation: true,
-            meal: {
+            dinners: {
                 dinnerSlot: true
+            },
+            Breakfasts: {
+                breakfastSlot: true
             },
         },
     });
