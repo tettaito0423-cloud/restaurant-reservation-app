@@ -52,7 +52,8 @@ export default function Modal({
             <button 
                 onClick={()=>{
                     onClose();
-                }}>
+                }}
+            >
                 X
             </button>
 

@@ -29,8 +29,6 @@ export default function Home() {
       const largeParty = 4;
 
 
-      console.log("selectedDinnerSlotIds", selectedDinnerSlotIds)
-      console.log("selectedGuestCount", selectedGuestCount)
 
 
 

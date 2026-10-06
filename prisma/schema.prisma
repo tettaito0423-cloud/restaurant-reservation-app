@@ -12,10 +12,15 @@ datasource db {
 }
 
 model DinnerSlot {
-  id          Int    @id @default(autoincrement())
-  startAt      DateTime
+  id              Int    @id @default(autoincrement())
+  dinnerStartAt   DateTime
+  meals           Dinner[]
+}
 
-  meals         Meal[]
+model BreakfastSlot {
+  id                Int @id @default(autoincrement())
+  breakfastStartAt  DateTime
+  meals             Breakfast[]
 }
 
 model Reservation {
@@ -28,7 +33,6 @@ model Reservation {
   checkout            DateTime
   dietaryRestrictions String
   comment             String
-
   stays               Stay[]
 }
 
@@ -36,25 +40,26 @@ model Stay {
   id            Int   @id @default(autoincrement())
   reservationId Int
   date          DateTime
-
   reservation   Reservation @relation(fields: [reservationId], references: [id])
-  meals         Meal[]
+  dinners       Dinner[]
+  Breakfasts    Breakfast[]
 }
 
-model Meal {
+model Dinner {
   id            Int   @id @default(autoincrement())
   stayId        Int
-  mealType      MealType
   courseType    CourseType
   dinnerSlotId  Int
-
   stay          Stay @relation(fields: [stayId], references: [id])
   dinnerSlot    DinnerSlot? @relation(fields: [dinnerSlotId], references: [id])
 }
 
-enum MealType {
-  DINNER
-  BREAKFAST
+model Breakfast {
+  id              Int   @id @default(autoincrement())
+  stayId          Int
+  breakfastSlotId Int
+  stay            Stay @relation(fields: [stayId], references: [id])
+  breakfastSlot   BreakfastSlot? @relation(fields: [breakfastSlotId], references: [id])
 }
 
 

@@ -2,7 +2,7 @@
 export type DinnerSlot = {
   id: number;
   startAt: string;
-  meal: [];
+  meals: [];
 };
 
 
