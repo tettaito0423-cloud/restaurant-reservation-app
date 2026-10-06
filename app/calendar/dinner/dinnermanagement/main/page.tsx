@@ -9,7 +9,6 @@ import DinnerManager from './DinnerManager'
 import SelectPlan from './SelectPlan'
 import NarrowDown from './NarrowDown'
 import CreateModal from './CreateModal'
-import DetailModal from './DetailModal'
 
 
 
@@ -55,9 +54,8 @@ export default function Home() {
       }, [scheData]);
 
 
-      {/*絞り込み機能 */}
 
-      {/*夕食時間絞り込み */}
+      {/*夕食時間絞り込み 
       const updateSelectedDinnerSlotId = (e:number) => {
             if (selectedDinnerSlotIds.includes(e)) {
                   setSelectedDinnerSlotId(
@@ -69,7 +67,8 @@ export default function Home() {
                   setSelectedDinnerSlotId([...selectedDinnerSlotIds, e]);
             }
       };
-      {/*人数絞り込み */}
+      */}
+      {/*人数絞り込み 
       const updateSelectedGuestCount = (i:number) =>{
             if (selectedGuestCount.includes(i)) {
                   setSelectedGuestCount(
@@ -81,6 +80,8 @@ export default function Home() {
                   setSelectedGuestCount([...selectedGuestCount, i])
             }
       };
+      */}
+      
 
 
 
@@ -103,8 +104,7 @@ export default function Home() {
                               <div className={styles.table}>
                                     <button
                                           onClick={()=>{
-                                                setReservation(null)
-                                                setModalType('detail')
+                                                 router.push(`../../detail/page.tsx`)
                                           }}
                                     >
                                           追加
@@ -163,16 +163,6 @@ export default function Home() {
                               date={date}
                               onClose={() => {setModalType(null)}}
                               getSchedule = {getSchedule}
-                        />
-                  )}
-
-                  {modalType === 'detail' &&(
-                        <DetailModal
-                              date = {date}
-                              onClose={() => {
-                                    setModalType(null)
-                              }}
-
                         />
                   )}
             </div>

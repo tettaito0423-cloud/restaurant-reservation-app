@@ -1,5 +1,3 @@
-import { DinnerSlot } from "./getTimetable"
-
 export type Reservation = {
   id: number;
   
@@ -8,7 +6,7 @@ export type Reservation = {
 export const fetchReservation = async (date: string)=>{
     const res = await fetch(
       `/api/users?date=${date}`
-    )
+    );
     const json:Reservation[] = await res.json();
-    return json
+    return json;
 };

@@ -105,11 +105,8 @@ export default function Modal({
                     </div>
                 </div>
             </div>
-            
-
             <div>
                 <p>タイムテーブル</p>
-                
             </div>
 
             <button onClick={handleSave}>

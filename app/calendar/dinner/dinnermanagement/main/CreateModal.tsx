@@ -21,12 +21,12 @@ export default function Modal({
   const [firstSlot, setFirst] = useState("18:00");
   const [secondSlot, setSecond] = useState("18:30");
   const [thirdSlot, setThird] = useState("");
-  const halhFirstSlot = "18:15";
+  const halfFirstSlot = "18:15";
 
 
 
   const handleSave = async () => {
-    const times:string[] = [firstSlot, halhFirstSlot, secondSlot, thirdSlot].filter(Boolean);
+    const times:string[] = [firstSlot, halfFirstSlot, secondSlot, thirdSlot].filter(Boolean);
 
     await fetch('/api/save', {
       method: 'POST',

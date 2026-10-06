@@ -1,6 +1,6 @@
 import styles from './DinnerManager.module.css';
-import {DinnerSlot} from '../../../../lib/getTimetable'
-import {Reservation} from '../../../../lib/getReservations'
+import {DinnerSlot} from '../../../../../lib/getTimetable'
+import {Reservation} from '../../../../../lib/getReservations'
 
 export default function DinnerManager({
     scheData,
