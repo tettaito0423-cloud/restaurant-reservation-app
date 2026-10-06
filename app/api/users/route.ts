@@ -43,10 +43,10 @@ export async function GET(req: Request){
         include: {
             reservation: true,
             dinners: {
-                dinnerSlot: true
+                include: {dinnerSlot: true}
             },
-            Breakfasts: {
-                breakfastSlot: true
+            breakfasts: {
+                include: {breakfastSlot: true}
             },
         },
     });
