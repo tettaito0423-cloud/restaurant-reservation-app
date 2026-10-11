@@ -1,18 +1,16 @@
 import styles from './DinnerManager.module.css';
-import {DinnerSlot} from '../../../../lib/getTimetable'
-import {Reservation} from '../../../../lib/getReservations'
+import {DinnerSlot} from '../../../../../lib/getTimetable'
+import {Reservation} from '../../../../../lib/getReservations'
 
 export default function NarrowDown({
-    scheData,
-    updateSelectedDinnerSlotId,
-    updateSelectedGuestCount,
+    dinnerSlotData,
     selectedDinnerSlotIds,
     selectedGuestCount,
     smallParty, 
     mediumParty,
     largeParty,
     }:{
-    scheData: DinnerSlot[];
+    dinnerSlotData: DinnerSlot[];
     updateSelectedDinnerSlotId: any;
     updateSelectedGuestCount: any;
     selectedDinnerSlotIds: number[];
@@ -24,7 +22,7 @@ export default function NarrowDown({
     return (
         <div className={styles.btnContainer}>
             <div>
-                {scheData.map((dinnerSlot)=>(
+                {dinnerSlotData.map((dinnerSlot)=>(
                     <button 
                         className={`
                             ${styles.btn} 

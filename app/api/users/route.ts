@@ -12,6 +12,7 @@ export async function POST(req: Request) {
         dietaryRestrictions, 
         comment,
     } = await req.json();
+
     const reservation = await prisma.reservation.create({
         data:{
             roomNumber: roomNumber,
@@ -22,8 +23,12 @@ export async function POST(req: Request) {
             checkout: checkout,
             dietaryRestrictions: dietaryRestrictions,
             comment: comment,
+            stays: {
+                create: [
+                    {date: checkin},
+                ],
+            },
         },
-        
     });
     return NextResponse.json(reservation);
 }

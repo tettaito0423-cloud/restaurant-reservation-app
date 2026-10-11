@@ -1,6 +1,6 @@
 'use client';
 
-import styles from './Modal.module.css';
+
 import { useState, useEffect } from 'react';
 import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
@@ -11,7 +11,7 @@ type Props = {
     onClose: ()=> void;
 };
 
-export default function Modal({
+export default function ReservationModal({
     date,
     onClose,
  }:Props){
@@ -25,30 +25,10 @@ export default function Modal({
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>()
     const [comment, setComment] = useState<string>()
 
-    const handleSave = async ()=>{
-        await fetch('/api/users',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                date: (date),
-                roomNumber: (roomNumber),
-                adultCount: Number(adultCount),
-                childMealCount: Number(childMealCount),
-                childNoMealCount: Number(childNoMealCount),
-                checkin: (checkin),
-                checkout: (checkout),
-                dietaryRestrictions: (dietaryRestrictions),
-                comment: (comment),
-            }),
-        });
-        onClose();
-    };
 
     return(
-    <div className={styles.modalOverlay}>
-        <div className={styles.modal}>
+    <div>
+        <div>
             <button 
                 onClick={()=>{
                     onClose();
@@ -63,7 +43,7 @@ export default function Modal({
                     type="number"
                 />
             </div>
-            <div className = {styles.term}>
+            <div>
                 <div>
                     <p>チェックイン</p>
                     <input 
@@ -93,7 +73,7 @@ export default function Modal({
                         />
                 </div>
                 <div>
-                    <div className={styles.child}>
+                    <div>
                         <div>
                             <p>アンファン</p>
                             <input type="number" />
@@ -107,11 +87,8 @@ export default function Modal({
             </div>
             <div>
                 <p>タイムテーブル</p>
+                
             </div>
-
-            <button onClick={handleSave}>
-                登録
-            </button>
         </div>
     </div>
     );

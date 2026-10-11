@@ -8,7 +8,8 @@ import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import DinnerManager from './DinnerManager'
 import SelectPlan from './SelectPlan'
 import NarrowDown from './NarrowDown'
-import CreateModal from './CreateModal'
+import CreateMealSlotModal from './CreateMealSlotModal'
+import CreateReservationModal from './CreateReservationModal'
 
 
 
@@ -17,9 +18,9 @@ export default function Home() {
       const searchParams = useSearchParams();
       const date = searchParams.get('date') ?? '';
       const router = useRouter();
-      const [scheData, setScheData] = useState<DinnerSlot[]>([]);
+      const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
       const [reservationData, setReservationData] = useState<Reservation[]>([]);
-      const [modalType, setModalType] = useState<'create'|'detail' |null>(null);
+      const [modalType, setModalType] = useState<'mealSlot'|'reservation' |null>(null);
       const [reservation, setReservation] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
       const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([]);
@@ -33,12 +34,12 @@ export default function Home() {
 
       const getSchedule = async ()=> {
             const schedule = await fetchSchedule(date);
-            setScheData(schedule);
+            setDinnerSlotData(schedule);
       };
 
       useEffect(() => {
             getSchedule()
-            scheData.map((e)=>(
+            dinnerSlotData.map((e)=>(
                   setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.id])
             ));
       }, []);
@@ -49,9 +50,9 @@ export default function Home() {
       };
 
       useEffect(() => {   
-            if (scheData.length < 2) return;
+            if (dinnerSlotData.length < 2) return;
             getReservation();
-      }, [scheData]);
+      }, [dinnerSlotData]);
 
 
 
@@ -85,7 +86,6 @@ export default function Home() {
 
 
 
-
       return(
             <div className = {styles.page}>
                   <div className={styles.header}>
@@ -99,13 +99,11 @@ export default function Home() {
                         </button>
                   </div>
 
-                  {scheData.length > 0 &&(
+                  {dinnerSlotData.length > 0 &&(
                         <div>
                               <div className={styles.table}>
                                     <button
-                                          onClick={()=>{
-                                                 router.push(`../../detail/page.tsx`)
-                                          }}
+                                          onClick={()=>{setModalType('reservation')}}
                                     >
                                           追加
                                     </button>
@@ -117,17 +115,16 @@ export default function Home() {
                                     />
 
 
-                                    {/*絞り込み*/}
+                                    {/*絞り込み
                                     <NarrowDown
-                                          scheData = {scheData}
-                                          updateSelectedDinnerSlotId = {updateSelectedDinnerSlotId}
-                                          updateSelectedGuestCount = {updateSelectedGuestCount}
+                                          dinnerSlotData = {dinnerSlotData}
                                           selectedDinnerSlotIds = {selectedDinnerSlotIds}
                                           selectedGuestCount = {selectedGuestCount}
                                           smallParty = {smallParty}
                                           mediumParty = {mediumParty}
                                           largeParty = {largeParty}
                                     />
+                                    */}
 
 
                                     {/*予約一覧*/}
@@ -139,30 +136,38 @@ export default function Home() {
                               {/*予約状況*/}
                               <div className={styles.timeTables}> 
                                     <DinnerManager
-                                          scheData = {scheData}
+                                          dinnerSlotData = {dinnerSlotData}
                                           reservationData = {reservationData}
                                           smallParty = {smallParty}
                                           mediumParty = {mediumParty}
                                           largeParty = {largeParty}
                                     />
+                                   
                               </div>
                         </div>
 
                   )}
                   
-                  {scheData.length === 0 &&(
+                  {dinnerSlotData.length === 0 &&(
                         <div>
-                              <button onClick={()=>setModalType('create')}>
+                              <button onClick={()=>setModalType('mealSlot')}>
                               新規作成
                               </button>
                         </div>
                   )}
 
-                  {modalType === 'create' &&(
-                        <CreateModal
+                  {modalType === 'mealSlot' &&(
+                        <CreateMealSlotModal
                               date={date}
                               onClose={() => {setModalType(null)}}
                               getSchedule = {getSchedule}
+                        />
+                  )}
+
+                  {modalType === 'reservation' &&(
+                        <CreateReservationModal
+                              date = {date}
+                              onClose={()=>{setModalType(null)}}
                         />
                   )}
             </div>

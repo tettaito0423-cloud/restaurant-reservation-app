@@ -3,13 +3,13 @@ import {DinnerSlot} from '../../../../../lib/getTimetable'
 import {Reservation} from '../../../../../lib/getReservations'
 
 export default function DinnerManager({
-    scheData,
+    dinnerSlotData,
     reservationData,
     smallParty,
     mediumParty,
     largeParty
 }:{
-    scheData:DinnerSlot[];
+    dinnerSlotData:DinnerSlot[];
     reservationData:Reservation[];
     smallParty: number;
     mediumParty: number;
@@ -32,7 +32,7 @@ export default function DinnerManager({
                             <th>3名</th>
                             <th>4名以上</th>
                         </tr>
-                            {scheData.map((schedule)=>(
+                            {dinnerSlotData.map((schedule)=>(
                                 <tr
                                     key={schedule.id}
                                 >
