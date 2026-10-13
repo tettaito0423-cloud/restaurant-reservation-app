@@ -24,6 +24,8 @@ export default function Modal({
     const [checkout, setChekout] = useState<string>(date)
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>()
     const [comment, setComment] = useState<string>()
+    const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
+    console.log("dinnerSlotData", dinnerSlotData)
 
 
 
@@ -42,8 +44,17 @@ export default function Modal({
         return stays;
     };
     const stays = generateStays(checkin, checkout)
+    console.log("stays", stays)
 
-    
+
+    const getSchedule = async ()=> {
+        const schedule = await fetchSchedule(stays);
+        setDinnerSlotData(schedule);
+    };
+
+    useEffect(() => {
+        getSchedule()
+    }, [checkin, checkout]);
 
 
 
@@ -130,9 +141,16 @@ export default function Modal({
             </div>
             <div>
                 <p>タイムテーブル</p>
-                    {stays.map((stay) => 
+                <div className = {styles.date}>
+                    {stays.map((stay) =>                      
                         <div key={stay}>
                             {stay}
+                        </div>
+                    )}
+                </div>
+                    {dinnerSlotData.map((dinnerSlot) => 
+                        <div key = {dinnerSlot.id}>
+                            {dinnerSlot.dinnerStartAt}
                         </div>
                     )}
             </div>

@@ -27,3 +27,7 @@
 .child {
   display: flex;
 }
+
+.date {
+  display:flex;
+}

@@ -17,6 +17,8 @@ import CreateReservationModal from './CreateReservationModal'
 export default function Home() {
       const searchParams = useSearchParams();
       const date = searchParams.get('date') ?? '';
+      const dates:string[] = [];
+      dates.push(date);
       const router = useRouter();
       const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
       const [reservationData, setReservationData] = useState<Reservation[]>([]);
@@ -33,7 +35,7 @@ export default function Home() {
 
 
       const getSchedule = async ()=> {
-            const schedule = await fetchSchedule(date);
+            const schedule = await fetchSchedule(dates);
             setDinnerSlotData(schedule);
       };
 
