@@ -26,7 +26,8 @@ export default function Modal({
     const [comment, setComment] = useState<string>()
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
     console.log("dinnerSlotData", dinnerSlotData)
-
+    console.log("checkin", checkin)
+    console.log("checkout", checkout)
 
 
     {/**チェックインとチェックアウトからすべての宿泊日を算出する */}
@@ -65,7 +66,6 @@ export default function Modal({
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                date: (date),
                 roomNumber: (roomNumber),
                 adultCount: Number(adultCount),
                 childMealCount: Number(childMealCount),
@@ -74,6 +74,8 @@ export default function Modal({
                 checkout: (checkout),
                 dietaryRestrictions: (dietaryRestrictions),
                 comment: (comment),
+                date: (stays),
+                
             }),
         });
         onClose();

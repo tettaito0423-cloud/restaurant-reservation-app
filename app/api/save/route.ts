@@ -35,29 +35,27 @@ export async function GET(req: Request){
   const datesParams = searchParams.get("dates");
   const dates = datesParams ? datesParams.split(","): [];
 
-  if(dates){
-    for (const date of dates){
-      const startDate = new Date(`${date}T00:00:00+09:00`);
-      const endDate = new Date(`${date}T00:00:00+09:00`);
-      endDate.setDate(endDate.getDate() + 1);
+  if(dates.length === 0){
+    return NextResponse.json([]);
+  }
+  for (const date of dates){
+    const startDate = new Date(`${date}T00:00:00+09:00`);
+    const endDate = new Date(`${date}T00:00:00+09:00`);
+    endDate.setDate(endDate.getDate() + 1);
 
-      const foundData = await prisma.dinnerSlot.findMany({
-        where: {
-          dinnerStartAt: {
-            gte: startDate,
-            lt: endDate,
-          },
+    const foundData = await prisma.dinnerSlot.findMany({
+      where: {
+        dinnerStartAt: {
+          gte: startDate,
+          lt: endDate,
         },
-      });
-      const newData = foundData.map(item=>{
-        const hour = String(item.dinnerStartAt.getHours());
-        const minute = String(item.dinnerStartAt.getMinutes()).padStart(2, '0');
-        return {...item, dinnerStartAt:`${hour}:${minute}`};
-      })
-      return NextResponse.json(newData);
-    }
-  };
-
-  const data = await prisma.dinnerSlot.findMany();
-  return NextResponse.json(data);
+      },
+    });
+    const newData = foundData.map(item=>{
+      const hour = String(item.dinnerStartAt.getHours());
+      const minute = String(item.dinnerStartAt.getMinutes()).padStart(2, '0');
+      return {...item, dinnerStartAt:`${hour}:${minute}`};
+    })
+    return NextResponse.json(newData);
+  }
 }
