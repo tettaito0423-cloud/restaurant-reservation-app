@@ -38,6 +38,16 @@ export async function GET(req: Request){
   if(dates.length === 0){
     return NextResponse.json([]);
   }
+  type TimeTable = {
+    date: string;
+    times: {
+      id: number;
+      dinnerStartAt: string;
+    }[];
+  };
+
+  const timeTable: TimeTable[] = []; 
+
   for (const date of dates){
     const startDate = new Date(`${date}T00:00:00+09:00`);
     const endDate = new Date(`${date}T00:00:00+09:00`);
@@ -51,11 +61,16 @@ export async function GET(req: Request){
         },
       },
     });
-    const newData = foundData.map(item=>{
+    const formattedData = foundData.map(item=>{
       const hour = String(item.dinnerStartAt.getHours());
       const minute = String(item.dinnerStartAt.getMinutes()).padStart(2, '0');
       return {...item, dinnerStartAt:`${hour}:${minute}`};
     })
-    return NextResponse.json(newData);
+    timeTable.push({
+      date: date,
+      times: formattedData
+    });
   }
+  return NextResponse.json(timeTable);
+  console.log(timeTable)
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { create } from "domain";
 
 export async function POST(req: Request) {
     const {
@@ -11,7 +12,10 @@ export async function POST(req: Request) {
         checkout, 
         dietaryRestrictions, 
         comment,
+        stays,
+        dinnerSlotId,
     } = await req.json();
+    
 
     const reservation = await prisma.reservation.create({
         data:{
@@ -24,9 +28,15 @@ export async function POST(req: Request) {
             dietaryRestrictions: dietaryRestrictions,
             comment: comment,
             stays: {
-                create: [
-                    {date: checkin},
-                ],
+                create: [{
+                    date: stays,
+                    dinners: {
+                        create: [{
+                            courseType: 
+                            dinnerSlotId: dinnerSlotId,
+                        }]
+                    }
+            }],
             },
         },
     });

@@ -32,18 +32,18 @@ export default function DinnerManager({
                             <th>3名</th>
                             <th>4名以上</th>
                         </tr>
-                            {dinnerSlotData.map((schedule)=>(
+                            {dinnerSlotData.map((dinnerSlot)=>(
                                 <tr
-                                    key={schedule.id}
+                                    key={dinnerSlot.date}
                                 >
                                     <th>
-                                        {schedule.startAt}
+                                        
                                     </th>
                                     <td>
                                         <div className={styles.textContainer}>
                                             <div>
                                                 {reservationData.filter((reservation)=>
-                                                    reservation.guestCount <= smallParty && reservation.dinnerSlotId === schedule.id)
+                                                    reservation.guestCount <= smallParty && reservation.dinnerSlotId === dinnerSlot.date)
                                                     .length
                                                 }件
                                             </div>
@@ -55,7 +55,7 @@ export default function DinnerManager({
                                     <td>
                                         <div>
                                             {reservationData.filter((reservation)=>
-                                                reservation.guestCount === mediumParty && reservation.dinnerSlotId === schedule.id)
+                                                reservation.guestCount === mediumParty && reservation.dinnerSlotId === dinnerSlot.date)
                                                 .length
                                             }件
                                         </div>
@@ -66,7 +66,7 @@ export default function DinnerManager({
                                     <td>
                                         <div>
                                             {reservationData.filter((reservation)=>
-                                                reservation.guestCount >= largeParty && reservation.dinnerSlotId === schedule.id)
+                                                reservation.guestCount >= largeParty && reservation.dinnerSlotId === dinnerSlot.date)
                                                 .length
                                             }件
                                         </div>

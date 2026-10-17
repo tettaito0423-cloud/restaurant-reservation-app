@@ -29,6 +29,7 @@ export default function Home() {
       const smallParty = 2;
       const mediumParty = 3;
       const largeParty = 4;
+      console.log("dinnerSlotData", dinnerSlotData)
 
 
 
@@ -42,7 +43,7 @@ export default function Home() {
       useEffect(() => {
             getSchedule()
             dinnerSlotData.map((e)=>(
-                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.id])
+                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.times.id])
             ));
       }, []);
 

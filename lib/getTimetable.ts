@@ -1,8 +1,11 @@
 
 export type DinnerSlot = {
-  id: number;
-  dinnerStartAt: string;
-  meals: [];
+  date: string;
+  times:{
+    id: number;
+    dinnerStartAt: string;
+    meals: [];
+  }[]
 };
 
 
