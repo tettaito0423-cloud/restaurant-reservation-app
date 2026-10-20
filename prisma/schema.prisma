@@ -26,9 +26,9 @@ model BreakfastSlot {
 model Reservation {
   id                  Int   @id @default(autoincrement())
   roomNumber          String
-  adultCount          Int
-  childMealCount      Int
-  childNoMealCount    Int
+  adultCount          Int  @default(0)
+  childMealCount      Int  @default(0)
+  childNoMealCount    Int  @default(0)
   checkin             DateTime
   checkout            DateTime
   dietaryRestrictions String

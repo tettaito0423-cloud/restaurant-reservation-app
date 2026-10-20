@@ -16,15 +16,15 @@ export default function Modal({
     date,
     onClose,
  }:Props){
-    const [courseType, setCourseType] = useState<'fullCourse'|'halfCourse'|null>(null);
+    const [courseType, setCourseType] = useState<'FULL'|'HALF'|null>(null);
     const [roomNumber, setRoomNumber] = useState<string>("");
-    const [adultCount, setAdultCount] = useState<number>();
-    const [childMealCount, setChildMealCount] = useState<number>();
-    const [childNoMealCount, setChildNoMealCount] = useState<number>();
+    const [adultCount, setAdultCount] = useState<number>(0);
+    const [childMealCount, setChildMealCount] = useState<number>(0);
+    const [childNoMealCount, setChildNoMealCount] = useState<number>(0);
     const [checkin, setChekin] = useState<string>(date);
     const [checkout, setChekout] = useState<string>(date);
-    const [dietaryRestrictions, setDietaryRestrictions] = useState<string>();
-    const [comment, setComment] = useState<string>();
+    const [dietaryRestrictions, setDietaryRestrictions] = useState<string>("");
+    const [comment, setComment] = useState<string>("");
     const [dinnerSlotId, setDinnerSlotId] = useState<number>();
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
     console.log("checkin", checkin);
@@ -76,6 +76,7 @@ export default function Modal({
                 dietaryRestrictions: (dietaryRestrictions),
                 comment: (comment),
                 date: (stays),
+                courseType: (courseType),
                 dinnerSlotId: (dinnerSlotId),
             }),
         });
@@ -99,6 +100,10 @@ export default function Modal({
                 <p>部屋番号</p>
                 <input
                     type="number"
+                    value = {roomNumber}
+                    onChange = {(e)=>
+                        setRoomNumber(e.target.value)
+                    }
                 />
             </div>
             <div>
@@ -107,17 +112,32 @@ export default function Modal({
                         <input
                             type="number"
                             value={adultCount}
+                            onChange = {(e)=>
+                                setAdultCount(Number(e.target.value))
+                            }
                         />
                 </div>
                 <div>
                     <div className={styles.child}>
                         <div>
                             <p>アンファン</p>
-                            <input type="number" />
+                            <input 
+                                type="number"
+                                value = {childMealCount}
+                                onChange = {(e)=>
+                                    setChildMealCount(Number(e.target.value))
+                                }
+                            />
                         </div>
                         <div>
                             <p>Dチャメ</p>
-                            <input type="number" />
+                            <input 
+                                type="number"
+                                value = {childNoMealCount}
+                                onChange = {(e)=>
+                                    setChildNoMealCount(Number(e.target.value))
+                                }
+                            />
                         </div>
                     </div>
                 </div>
@@ -155,21 +175,38 @@ export default function Modal({
                                     <input 
                                         type="radio"
                                         name = "courseType"
-                                        onChange = {()=>setCourseType('fullCourse')}
+                                        onChange = {()=>setCourseType('FULL')}
                                     />フルコース
                                 </label>
                                 <label>
                                     <input 
                                         type="radio"
                                         name = "courseType"
-                                        onChange = {()=>setCourseType('halfCourse')}    
+                                        onChange = {()=>setCourseType('HALF')}    
                                     />ハーフコース
                                 </label>
                        
 
 
-                            {courseType === 'fullCourse' &&(
+                            {courseType === 'FULL' &&(
                                 dinnerSlot.times.filter((time) => time.dinnerStartAt !== "18:15").map((time)=>
+                                    <div key = {time.id}>
+                                        <label>
+                                            <input 
+                                                type="radio"
+                                                name = "time"
+                                                value = {time.id}
+                                                onChange={(e)=>{
+                                                    setDinnerSlotId(parseFloat(e.target.value));
+                                                }}
+                                            />{time.dinnerStartAt}
+                                        </label>
+                                    </div>
+                                )
+                            )}
+
+                            {courseType === 'HALF' &&(
+                                dinnerSlot.times.filter((time) => time.dinnerStartAt !== "18:00").map((time)=>
                                     <div key = {time.id}>
                                         <label>
                                             <input 

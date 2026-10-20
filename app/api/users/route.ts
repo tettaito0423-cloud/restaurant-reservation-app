@@ -13,6 +13,7 @@ export async function POST(req: Request) {
         dietaryRestrictions, 
         comment,
         stays,
+        courseType,
         dinnerSlotId,
     } = await req.json();
     
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
                     date: stays,
                     dinners: {
                         create: [{
-                            courseType: 
+                            courseType: courseType,
                             dinnerSlotId: dinnerSlotId,
                         }]
                     }
