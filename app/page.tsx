@@ -19,17 +19,22 @@ export default function Home() {
   const [date, setDate] = useState("")
   const router = useRouter()
   const [events, setEvents] = useState([]);
-  const [data, setData] = useState<DataType | null>(null);
+  console.log("events", events);
 
   useEffect(()=>{
     const fetchData = async()=>{
       const res = await fetch(`/api/save`);
       const data = await res.json();
-      const formatted = data.map((item:any)=>({
-        start:item.startAt
-      }))
+
+      console.log("data:", data)
+
+      const formatted = data.map((item:any)=>{
+        return item.times.map((time:any)=>({
+          start: time.dinnerStartAt
+        }));
+      });
       setEvents(formatted);
-    }
+    };
     fetchData();
   },[]);
 

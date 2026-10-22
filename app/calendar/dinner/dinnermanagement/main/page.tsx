@@ -42,9 +42,12 @@ export default function Home() {
 
       useEffect(() => {
             getSchedule()
-            dinnerSlotData.map((e)=>(
-                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.times.id])
-            ));
+            dinnerSlotData.map((e)=>{
+                  e.times.map((i)=>(
+                        setSelectedDinnerSlotId([...selectedDinnerSlotIds, i.id])
+                  ))
+                  
+            });
       }, []);
 
       const getReservation = async ()=> {
