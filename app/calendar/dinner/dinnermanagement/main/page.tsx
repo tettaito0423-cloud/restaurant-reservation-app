@@ -29,14 +29,11 @@ export default function Home() {
       const smallParty = 2;
       const mediumParty = 3;
       const largeParty = 4;
-      console.log("dinnerSlotData", dinnerSlotData)
-
-
-
 
 
       const getSchedule = async ()=> {
             const schedule = await fetchSchedule(dates);
+            console.log("schedule", schedule)
             setDinnerSlotData(schedule);
       };
 

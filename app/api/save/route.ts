@@ -35,42 +35,35 @@ export async function GET(req: Request){
   const datesParams = searchParams.get("dates");
   const dates = datesParams ? datesParams.split(","): [];
 
+
   if(dates.length === 0){
     return NextResponse.json([]);
-  }
-  type TimeTable = {
-    date: string;
-    times: {
-      id: number;
-      dinnerStartAt: string;
-    }[];
-  };
-
-  const timeTable: TimeTable[] = []; 
-
-  for (const date of dates){
-    const startDate = new Date(`${date}T00:00:00+09:00`);
-    const endDate = new Date(`${date}T00:00:00+09:00`);
-    endDate.setDate(endDate.getDate() + 1);
-
-    const foundData = await prisma.dinnerSlot.findMany({
+  }else if(dates.length === 1){
+    const start = new Date(dates[0])
+    const end = new Date(dates[0] + 1)
+    console.log(end)
+    const dateData = await prisma.dinnerSlot.findMany({
       where: {
         dinnerStartAt: {
-          gte: startDate,
-          lt: endDate,
-        },
-      },
-    });
-    const formattedData = foundData.map(item=>{
-      const hour = String(item.dinnerStartAt.getHours());
-      const minute = String(item.dinnerStartAt.getMinutes()).padStart(2, '0');
-      return {...item, dinnerStartAt:`${hour}:${minute}`};
+          gte: start,
+          lt: end
+        }
+      }
     })
-    timeTable.push({
-      date: date,
-      times: formattedData
-    });
+    console.log("dateData", dateData)
+    return NextResponse.json(dateData);
   }
-  return NextResponse.json(timeTable);
-  console.log(timeTable)
+
+  
+  const foundData = await prisma.dinnerSlot.findMany({
+    where: {
+      dinnerStartAt: {
+        gte: new Date(dates[0]),
+        lt: new Date(dates[1]),
+      },
+    },
+  });
+
+
+  return NextResponse.json(foundData);
 }

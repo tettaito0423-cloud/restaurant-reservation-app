@@ -31,7 +31,6 @@ export default function Modal({
     console.log("checkout", checkout);
 
 
-    {/**チェックインとチェックアウトからすべての宿泊日を算出する */}
     const generateStays = (checkin: string, checkout: string) => {
         const stays:string[] = [];
         for(
@@ -45,8 +44,11 @@ export default function Modal({
         }
         return stays;
     };
-    const stays = generateStays(checkin, checkout)
+
+    const stays = [checkin, checkout]
     console.log("stays", stays)
+
+
 
 
     const getSchedule = async ()=> {

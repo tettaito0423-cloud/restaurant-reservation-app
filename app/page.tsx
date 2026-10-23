@@ -7,36 +7,34 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Modal from './modal';
-import { title } from 'process';
+import {fetchSchedule, DinnerSlot} from '../lib/getTimetable'
+
 
 export default function Home() {
 
-  type DataType = {
-    startAt: string
-  };
-
+  const [firstAndLastDays, setFirstAndLastDays] = useState<string[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [date, setDate] = useState("")
   const router = useRouter()
   const [events, setEvents] = useState([]);
-  console.log("events", events);
 
-  useEffect(()=>{
-    const fetchData = async()=>{
-      const res = await fetch(`/api/save`);
-      const data = await res.json();
 
-      console.log("data:", data)
+  const getSchedule = async ()=> {
+    const data = await fetchSchedule(firstAndLastDays);
+    const schedules = data.map((item:any)=> (
+      item.dinnerStartAt
+    ))
+    const event = schedules.map((schedule:any) =>({
+      start: schedule 
+    }))
+    setEvents(event)
+  };
 
-      const formatted = data.map((item:any)=>{
-        return item.times.map((time:any)=>({
-          start: time.dinnerStartAt
-        }));
-      });
-      setEvents(formatted);
-    };
-    fetchData();
-  },[]);
+
+  useEffect(() => {
+    getSchedule()
+  }, [firstAndLastDays]
+  );
 
   
   return (
@@ -46,6 +44,13 @@ export default function Home() {
         initialView="dayGridMonth"
         locale={jaLocale}
         events = {events}
+        eventTimeFormat={{
+          hour: "2-digit",
+          minute: "2-digit"
+        }}
+        datesSet={(info) => 
+          setFirstAndLastDays([String(info.start), String(info.end)])
+        }
         dateClick={(info) =>{
           setDate(info.dateStr)
           setIsModalOpen(true)

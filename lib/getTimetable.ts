@@ -12,6 +12,6 @@ export type DinnerSlot = {
 
 export const fetchSchedule = async (dates:string[]) => {
   const res = await fetch(`/api/save?dates=${dates.join(",")}`);
-  const json:DinnerSlot[] = await res.json();
+  const json = await res.json();
   return json
 };
