@@ -32,8 +32,9 @@ export default function DinnerManager({
                             <th>3名</th>
                             <th>4名以上</th>
                         </tr>
+                        {/**
                             {dinnerSlotData.map((dinnerSlot)=>(
-                                <tr
+                                <tr 
                                     key={dinnerSlot.date}
                                 >
                                     <th>
@@ -76,6 +77,7 @@ export default function DinnerManager({
                                     </td>
                                 </tr>
                             ))}
+                         */}
                     </tbody>
                 </table>
             </div>

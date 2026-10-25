@@ -18,9 +18,12 @@ export default function Home() {
   const router = useRouter()
   const [events, setEvents] = useState([]);
 
+  console.log("firstAndLastDays", firstAndLastDays)
+
 
   const getSchedule = async ()=> {
     const data = await fetchSchedule(firstAndLastDays);
+    console.log("data", data)
     const schedules = data.map((item:any)=> (
       item.dinnerStartAt
     ))
