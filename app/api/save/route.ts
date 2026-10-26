@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 
 export async function POST(req: Request) {
-  const {date, times} =await req.json();
+  const {date, slots} =await req.json();
 
   //既存データを削除
   const startDate = new Date(`${date}T00:00:00+09:00`);
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   //データを登録
   //フルコースのスケジュールを登録したら自動でハーフコース（18:15）も作らる。
-  const data = times.map((time:string)=>({
+  const data = slots.map((time:string)=>({
     dinnerStartAt: new Date(`${date}T${time}:00`),
   }))
   const result = await prisma.dinnerSlot.createMany({
@@ -35,9 +35,6 @@ export async function GET(req: Request){
   const datesParams = searchParams.get("dates");
   const dates = datesParams ? datesParams.split(","): [];
 
-  
-  console.log("dates", dates);
-
 
   if(dates.length === 0){
     return NextResponse.json([]);
@@ -45,8 +42,6 @@ export async function GET(req: Request){
     const start = new Date(dates[0]);
     const end = new Date(start);
     end.setDate(end.getDate() + 1);
-    console.log("start", start);
-    console.log("end", end);
     const dateData = await prisma.dinnerSlot.findMany({
       where: {
         dinnerStartAt: {
@@ -55,20 +50,16 @@ export async function GET(req: Request){
         }
       }
     })
-    console.log("dateData", dateData)
     return NextResponse.json(dateData);
-  }
-
-  
-  const foundData = await prisma.dinnerSlot.findMany({
-    where: {
-      dinnerStartAt: {
-        gte: new Date(dates[0]),
-        lt: new Date(dates[1]),
+  }else{
+    const foundData = await prisma.dinnerSlot.findMany({
+      where: {
+        dinnerStartAt: {
+          gte: new Date(dates[0]),
+          lt: new Date(dates[1]),
+        },
       },
-    },
-  });
-
-
-  return NextResponse.json(foundData);
+    });
+    return NextResponse.json(foundData);
+  }
 }

@@ -26,7 +26,7 @@ export default function Modal({
 
 
   const handleSave = async () => {
-    const times:string[] = [firstSlot, halfFirstSlot, secondSlot, thirdSlot].filter(Boolean);
+    const slots:string[] = [firstSlot, halfFirstSlot, secondSlot, thirdSlot].filter(Boolean);
 
     await fetch('/api/save', {
       method: 'POST',
@@ -35,7 +35,7 @@ export default function Modal({
       },
       body: JSON.stringify({
         date,
-        times,
+        slots,
       }),
     });
     getSchedule()

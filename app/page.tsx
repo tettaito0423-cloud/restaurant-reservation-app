@@ -18,19 +18,24 @@ export default function Home() {
   const router = useRouter()
   const [events, setEvents] = useState([]);
 
-  console.log("firstAndLastDays", firstAndLastDays)
-
 
   const getSchedule = async ()=> {
     const data = await fetchSchedule(firstAndLastDays);
     console.log("data", data)
-    const schedules = data.map((item:any)=> (
-      item.dinnerStartAt
-    ))
-    const event = schedules.map((schedule:any) =>({
-      start: schedule 
+    const formattedData = data.map((item: any) => ({
+      id: item.id,
+      dinnerStartAt: new Date(item.dinnerStartAt),
     }))
-    setEvents(event)
+
+    const filteredData = formattedData.filter((item:any) => (
+      `${String(item.dinnerStartAt.getHours())}:${String(item.dinnerStartAt.getMinutes())}` !== "18:15"
+    ))
+    
+    const events = filteredData.map((item:any) => ({
+      start: item.dinnerStartAt
+    }))
+
+    setEvents(events)
   };
 
 
@@ -38,6 +43,8 @@ export default function Home() {
     getSchedule()
   }, [firstAndLastDays]
   );
+
+  console.log("events", events)
 
   
   return (
@@ -51,9 +58,9 @@ export default function Home() {
           hour: "2-digit",
           minute: "2-digit"
         }}
-        datesSet={(info) => 
+        datesSet={(info) => {
           setFirstAndLastDays([String(info.start), String(info.end)])
-        }
+        }}
         dateClick={(info) =>{
           setDate(info.dateStr)
           setIsModalOpen(true)
