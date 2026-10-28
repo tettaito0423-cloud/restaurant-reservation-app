@@ -6,11 +6,18 @@ import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import { stringify } from 'querystring';
 import { time } from 'console';
+//import { DinnerSlot } from '@prisma/client';
 
 type Props = {
     date: string;
     onClose: ()=> void;
 };
+
+type DinnerSlotData = {
+    date: string
+    dinnerSlots: DinnerSlot[] | undefined;
+}
+
 
 export default function Modal({
     date,
@@ -26,40 +33,30 @@ export default function Modal({
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const [dinnerSlotId, setDinnerSlotId] = useState<number>();
-    const [dinnerSlotData, setDinnerSlotData] = useState([]);
-
-
-    const generateStays = (checkin: string, checkout: string) => {
-        const stays:string[] = [];
-        for(
-            let day = new Date(checkin);
-            day < new Date(checkout);
-            day.setDate(day.getDate()+1)
-        ) {
-            stays.push(
-                `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, "0")}-${String(day.getDate()).padStart(2, "0")}`
-            );
-        }
-        return stays;
-    };
-
+    const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
     const stays = [checkin, checkout]
 
 
     const getSchedule = async ()=> {
         const schedule = await fetchSchedule(stays);
-        const a = schedule.map((i:any) => ({
-            id: i.id,
-            dinnerStartAt : new Date(i.dinnerStartAt)
-        }))
+        const result = Object.groupBy(
+            schedule,
+            (element) => element.dinnerStartAt.split("T")[0]
+        );
+        console.log("result", result)
+        const a = Object.entries(result).map(([key, value]) => ({
+            date: key,
+            dinnerSlots: value
+        }));
+        console.log("a", a);
         setDinnerSlotData(a);
     };
+
 
     useEffect(() => {
         getSchedule()
     }, [checkin, checkout]);
-
-
+    console.log("dinnerSlotData", dinnerSlotData)
 
     const handleSave = async ()=>{
         await fetch('/api/users',{
@@ -168,12 +165,12 @@ export default function Modal({
             <div>
                 <p>タイムテーブル</p>
                 <div className = {styles.date}>
-
+                    
                     {dinnerSlotData.map((dinnerSlot) =>(
-                        <div key = {dinnerSlot.dinnerStartAt}>
-                            {dinnerSlot.times.map((time) => (
-                                <div key = {time.id}>
-                                    <h3>{dinnerSlot.date}</h3>
+                        <div key = {dinnerSlot.date}>
+                            {Object.entries(dinnerSlot).map(([key, value]) =>(
+                                <div key = {dinnerSlot.date}>
+                                    <h3>{}</h3>
                                     <label>
                                         <input 
                                             type="radio"
@@ -192,7 +189,7 @@ export default function Modal({
 
 
                                     {courseType === 'FULL' &&(
-                                        dinnerSlot.times.filter((time) => time.dinnerStartAt !== "18:15").map((time)=>
+                                        dinnerSlot.dinnerSlots.filter((time) => time.dinnerStartAt !== "18:15").map((time)=>
                                             <div key = {time.id}>
                                                 <label>
                                                     <input 
@@ -209,7 +206,7 @@ export default function Modal({
                                     )}
 
                                     {courseType === 'HALF' &&(
-                                        dinnerSlot.times.filter((time) => time.dinnerStartAt !== "18:00").map((time)=>
+                                        dinnerSlot.dinnerSlots.filter((time) => time.dinnerStartAt !== "18:00").map((time)=>
                                             <div key = {time.id}>
                                                 <label>
                                                     <input 
@@ -226,9 +223,10 @@ export default function Modal({
                                     )}
                                 </div>
                             ))}
+                                
                         </div>
                     ))}
-
+                    
                 </div>
             </div>
             <div>

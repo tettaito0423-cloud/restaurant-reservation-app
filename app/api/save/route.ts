@@ -34,6 +34,8 @@ export async function GET(req: Request){
   const { searchParams } = new URL(req.url);
   const datesParams = searchParams.get("dates");
   const dates = datesParams ? datesParams.split(","): [];
+  const startDate = 0; 
+  const endDate = 1;
 
 
   if(dates.length === 0){
@@ -55,8 +57,8 @@ export async function GET(req: Request){
     const foundData = await prisma.dinnerSlot.findMany({
       where: {
         dinnerStartAt: {
-          gte: new Date(dates[0]),
-          lt: new Date(dates[1]),
+          gte: new Date(dates[startDate]),
+          lt: new Date(dates[endDate]),
         },
       },
     });
