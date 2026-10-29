@@ -165,67 +165,82 @@ export default function Modal({
             <div>
                 <p>タイムテーブル</p>
                 <div className = {styles.date}>
-                    
-                    {dinnerSlotData.map((dinnerSlot) =>(
-                        <div key = {dinnerSlot.date}>
-                            {Object.entries(dinnerSlot).map(([key, value]) =>(
-                                <div key = {dinnerSlot.date}>
-                                    <h3>{}</h3>
-                                    <label>
-                                        <input 
-                                            type="radio"
-                                            name = "courseType"
-                                            onChange = {()=>setCourseType('FULL')}
-                                        />フルコース
-                                    </label>
-                                    <label>
-                                        <input 
-                                            type="radio"
-                                            name = "courseType"
-                                            onChange = {()=>setCourseType('HALF')}    
-                                        />ハーフコース
-                                    </label>
+                <label>
+                    <input 
+                        type="radio"
+                        name = "courseType"
+                        onChange = {()=>setCourseType('FULL')}
+                    />フルコース
+                </label>
+                <label>
+                    <input 
+                        type="radio"
+                        name = "courseType"
+                        onChange = {()=>setCourseType('HALF')}    
+                    />ハーフコース
+                </label>
+                
+                {dinnerSlotData.map((dinnerSlot) =>(
+                    <div key = {dinnerSlot.date}>
+                    {/**
+                    *   {
+                            "date": "2026-10-12",
+                            "dinnerSlots": [
+                                {
+                                    "id": 13,
+                                    "dinnerStartAt": "2026-10-12T09:00:00.000Z"
+                                },
+                                {
+                                    "id": 14,
+                                    "dinnerStartAt": "2026-10-12T09:15:00.000Z"
+                                },
+                                {
+                                    "id": 15,
+                                    "dinnerStartAt": "2026-10-12T09:30:00.000Z"
+                                }
+                            ]
+                        }
+                    */}
+                        {dinnerSlot.dinnerSlots.map((item) => (
+                            <div key = {item.id}>
+                                {courseType === 'FULL' &&(
+                                    item.filter((time: any) => time.dinnerStartAt !== "18:15").map((time)=>
+                                        <div key = {time.id}>
+                                            <label>
+                                                <input 
+                                                    type="radio"
+                                                    name = "time"
+                                                    value = {time.id}
+                                                    onChange={(e)=>{
+                                                        setDinnerSlotId(parseFloat(e.target.value));
+                                                    }}
+                                                />{time.dinnerStartAt}
+                                            </label>
+                                        </div>
+                                    )
+                                )}
+
+                                {courseType === 'HALF' &&(
+                                    item.filter((time: any) => time.dinnerStartAt !== "18:00").map((time)=>
+                                        <div key = {time.id}>
+                                            <label>
+                                                <input 
+                                                    type="radio"
+                                                    name = "time"
+                                                    value = {time.id}
+                                                    onChange={(e)=>{
+                                                        setDinnerSlotId(parseFloat(e.target.value));
+                                                    }}
+                                                />{time.dinnerStartAt}
+                                            </label>
+                                        </div>
+                                    )
+                                        )}
+                            </div>
+                        ))}
                             
-
-
-                                    {courseType === 'FULL' &&(
-                                        dinnerSlot.dinnerSlots.filter((time) => time.dinnerStartAt !== "18:15").map((time)=>
-                                            <div key = {time.id}>
-                                                <label>
-                                                    <input 
-                                                        type="radio"
-                                                        name = "time"
-                                                        value = {time.id}
-                                                        onChange={(e)=>{
-                                                            setDinnerSlotId(parseFloat(e.target.value));
-                                                        }}
-                                                    />{time.dinnerStartAt}
-                                                </label>
-                                            </div>
-                                        )
-                                    )}
-
-                                    {courseType === 'HALF' &&(
-                                        dinnerSlot.dinnerSlots.filter((time) => time.dinnerStartAt !== "18:00").map((time)=>
-                                            <div key = {time.id}>
-                                                <label>
-                                                    <input 
-                                                        type="radio"
-                                                        name = "time"
-                                                        value = {time.id}
-                                                        onChange={(e)=>{
-                                                            setDinnerSlotId(parseFloat(e.target.value));
-                                                        }}
-                                                    />{time.dinnerStartAt}
-                                                </label>
-                                            </div>
-                                        )
-                                    )}
-                                </div>
-                            ))}
-                                
-                        </div>
-                    ))}
+                    </div>
+                ))}
                     
                 </div>
             </div>
