@@ -16,25 +16,22 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [date, setDate] = useState("")
   const router = useRouter()
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<{start: string}[]>([]);
 
 
   const getSchedule = async ()=> {
     const data = await fetchSchedule(firstAndLastDays);
-    console.log("data", data)
     const formattedData = data.map((item: any) => ({
       id: item.id,
       dinnerStartAt: new Date(item.dinnerStartAt),
-    }))
+    }));
 
     const filteredData = formattedData.filter((item:any) => (
       `${String(item.dinnerStartAt.getHours())}:${String(item.dinnerStartAt.getMinutes())}` !== "18:15"
-    ))
-    
+    ));
     const events = filteredData.map((item:any) => ({
       start: item.dinnerStartAt
-    }))
-
+    }));
     setEvents(events)
   };
 
@@ -44,7 +41,6 @@ export default function Home() {
   }, [firstAndLastDays]
   );
 
-  console.log("events", events)
 
   
   return (

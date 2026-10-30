@@ -62,6 +62,25 @@ export async function GET(req: Request){
         },
       },
     });
-    return NextResponse.json(foundData);
+    console.log(foundData)
+    const result = foundData.map((item) =>{
+      const date = new Date(item.dinnerStartAt);
+
+      const japanTime = new Intl.DateTimeFormat("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }).format(date).replace(" ", "T");
+      console.log("japanTime", japanTime)
+
+      return {
+        ...item,
+        dinnerStartAt: japanTime,
+      };
+    });
+    return NextResponse.json(result);
   }
 }
