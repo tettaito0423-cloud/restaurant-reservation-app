@@ -39,9 +39,7 @@ export default function Home() {
       useEffect(() => {
             getSchedule()
             dinnerSlotData.map((e)=>{
-                  e.times.map((i)=>(
-                        setSelectedDinnerSlotId([...selectedDinnerSlotIds, i.id])
-                  ))
+                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.id])
                   
             });
       }, []);

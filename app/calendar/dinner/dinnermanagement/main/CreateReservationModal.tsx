@@ -6,6 +6,7 @@ import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import { stringify } from 'querystring';
 import { time } from 'console';
+import { compareNumbers } from '@fullcalendar/core/internal';
 //import { DinnerSlot } from '@prisma/client';
 
 type Props = {
@@ -34,6 +35,9 @@ export default function Modal({
     const [comment, setComment] = useState<string>("");
     const [dinnerSlotId, setDinnerSlotId] = useState<number>();
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string>(date);
+    const [days, setDays] = useState<string[]>([]);
+
     const stays = [checkin, checkout]
 
 
@@ -41,8 +45,11 @@ export default function Modal({
         const schedule = await fetchSchedule(stays);
         const result = Object.groupBy(
             schedule,
-            (element) => element.dinnerStartAt.split("T")[0]
+            (element) => (
+                `${String(new Date(element.dinnerStartAt).getMonth() + 1)}/${String(new Date(element.dinnerStartAt).getDate())}`
+            )
         ); 
+        console.log("result", result)
         const a = Object.entries(result).map(([key, value]) => ({
             date: key,
             dinnerSlots: value ?? []
@@ -50,11 +57,36 @@ export default function Modal({
         setDinnerSlotData(a);
     };
 
+    const getDays = () => {
+        const start = new Date(checkin);
+        const end = new Date(checkout);
+
+        const numberOfDays = Math.floor(
+            Number(end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
+        const dayArr: string[] = [];
+        for (let i = 0; i < numberOfDays; i++) {
+            const day = new Date(start)
+            day.setDate(start.getDate() + i)
+            const fixedDay = new Intl.DateTimeFormat("ja-JP", {
+                timeZone: "Asia/Tokyo",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+            }).format(day).replace(/\//g, "-").replace(" ", "T");
+            dayArr.push(`${new Date(fixedDay).getMonth() + 1}/${new Date(fixedDay).getDate()}`)
+        }
+        setDays(dayArr);
+        setSelectedDate(dayArr[0])
+    };
 
     useEffect(() => {
         getSchedule()
+        getDays()
     }, [checkin, checkout]);
 
+  
     const handleSave = async ()=>{
         await fetch('/api/users',{
             method: 'POST',
@@ -136,6 +168,14 @@ export default function Modal({
                         </div>
                     </div>
                 </div>
+                <div>
+                    <div>食事制限</div>
+                    <input type="text" />
+                </div>
+                <div>
+                    <div>コメント</div>
+                    <input type="text" />
+                </div>
             </div>
             <div className = {styles.term}>
                 <div>
@@ -161,70 +201,49 @@ export default function Modal({
             </div>
             <div>
                 <p>タイムテーブル</p>
-                <label>
-                    <input 
-                        type="radio"
-                        name = "courseType"
-                        onChange = {()=>setCourseType('FULL')}
-                    />フルコース
-                </label>
-                <label>
-                    <input 
-                        type="radio"
-                        name = "courseType"
-                        onChange = {()=>setCourseType('HALF')}    
-                    />ハーフコース
-                </label>
-                <div className = {styles.dinnerSlot}>
-                    {dinnerSlotData.map((dinnerSlot) =>(
-                        <div key = {dinnerSlot.date}>
-                            <div>
-                                {dinnerSlot.date}
+                <div>
+                    <div>夕食</div>
+                    <div className = {styles.radioCards}>
+                        {days.map((day) =>
+                            <div key = {day}>
+                                <label 
+                                    className = {styles.radioCard}
+                                    onClick = {() =>
+                                        setSelectedDate(day)
+                                    }
+                                >
+                                    <input 
+                                        type="radio"
+                                        name = "date"
+                                    />
+                                    {day}
+                                </label>
                             </div>
-                            {courseType === 'FULL' &&(
-                                dinnerSlot.dinnerSlots.filter((item) => item.dinnerStartAt !== `${dinnerSlot.date}T18:15`).map((a) =>(
-                                    <div key = {a.id}>
-                                        <label>
-                                            <input 
-                                                type="radio"
-                                                name = "time"
-                                                value = {a.id}
-                                                onChange={(e)=>{
-                                                    setDinnerSlotId(parseFloat(e.target.value));
-                                                }}
-                                            />{a.dinnerStartAt.split("T")[1]}
-                                        </label>
-                                    </div>
-                                ))
-                            )}
-
-                            {courseType === 'HALF' &&(
-                                dinnerSlot.dinnerSlots.filter((item) => item.dinnerStartAt !== `${dinnerSlot.date}T18:00`).map((a) => (
-                                    <div key = {a.id}>
-                                        <label>
-                                            <input 
-                                                type="radio"
-                                                name = "time"
-                                                value = {a.id}
-                                                onChange={(e)=>{
-                                                    setDinnerSlotId(parseFloat(e.target.value));
-                                                }}
-                                            />{a.dinnerStartAt.split("T")[1]}
-                                        </label>
-                                    </div>
-                                )
-                            ))}
-                        </div>
-                    ))}
+                        )}
+                    </div>
+                    <div>
+                        {dinnerSlotData.filter((dinnerSlot) => dinnerSlot.date === selectedDate).map((i) =>
+                                <div className = {styles.dinnerSlots}>
+                                    {i.dinnerSlots.map((a) =>
+                                        <div 
+                                            key = {a.id}
+                                            className = {styles.dinnerSlot}
+                                        >
+                                            <label>
+                                                <input 
+                                                    type="radio"
+                                                    value = {a.id}
+                                                    onChange = {(e) =>
+                                                        setDinnerSlotId(Number(e.target.value))
+                                                    }
+                                                />{a.dinnerStartAt.split("T")[1]}
+                                            </label>
+                                        </div>
+                                    )}
+                                </div>
+                        )}
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div>食事制限</div>
-                <input type="text" />
-            </div>
-            <div>
-                <div>コメント</div>
-                <input type="text" />
             </div>
             <button onClick={handleSave}>
                 登録

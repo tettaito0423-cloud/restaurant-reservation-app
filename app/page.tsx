@@ -21,14 +21,12 @@ export default function Home() {
 
   const getSchedule = async ()=> {
     const data = await fetchSchedule(firstAndLastDays);
-    console.log("data", data)
     const formattedData = data.map((item: any) => ({
       id: item.id,
-      dinnerStartAt: new Date(item.dinnerStartAt),
+      dinnerStartAt: item.dinnerStartAt,
     }));
-    console.log("formattedData", formattedData)
     const filteredData = formattedData.filter((item:any) => (
-      `${String(item.dinnerStartAt.getHours())}:${String(item.dinnerStartAt.getMinutes())}` !== "18:15"
+      item.dinnerStartAt.split("T")[1] !== "18:15"
     ));
     const events = filteredData.map((item:any) => ({
       start: item.dinnerStartAt

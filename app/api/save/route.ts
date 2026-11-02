@@ -62,7 +62,6 @@ export async function GET(req: Request){
         },
       },
     });
-    console.log(foundData)
     const result = foundData.map((item) =>{
       const date = new Date(item.dinnerStartAt);
 
@@ -74,8 +73,7 @@ export async function GET(req: Request){
         hour: "2-digit",
         minute: "2-digit",
         hourCycle: "h23",
-      }).format(date).replace(" ", "T");
-      console.log("japanTime", japanTime)
+      }).format(date).replace(/\//g, "-").replace(" ", "T");
 
       return {
         ...item,
