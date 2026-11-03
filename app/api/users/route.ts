@@ -29,15 +29,15 @@ export async function POST(req: Request) {
             dietaryRestrictions: dietaryRestrictions,
             comment: comment,
             stays: {
-                create: [{
-                    date: stays,
+                create: stays.map((day: any) => ({
+                    date: day,
                     dinners: {
-                        create: [{
-                            courseType: courseType,
-                            dinnerSlotId: dinnerSlotId,
-                        }]
+                        create: {
+                            courseType: day.courseType,
+                            dinnerSlotId: day.dinnerSlotId,
+                        }
                     }
-            }],
+                })),
             },
         },
     });

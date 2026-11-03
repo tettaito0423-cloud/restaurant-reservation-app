@@ -37,6 +37,7 @@ export default function Modal({
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(date);
     const [days, setDays] = useState<string[]>([]);
+    const [isSelected, setIsSelected] = useState(false)
 
     const stays = [checkin, checkout]
 
@@ -78,7 +79,7 @@ export default function Modal({
             dayArr.push(`${new Date(fixedDay).getMonth() + 1}/${new Date(fixedDay).getDate()}`)
         }
         setDays(dayArr);
-        setSelectedDate(dayArr[0])
+        setSelectedDate(dayArr[0]);
     };
 
     useEffect(() => {
@@ -102,7 +103,7 @@ export default function Modal({
                 checkout: (checkout),
                 dietaryRestrictions: (dietaryRestrictions),
                 comment: (comment),
-                date: (stays),
+                date: (days),
                 courseType: (courseType),
                 dinnerSlotId: (dinnerSlotId),
             }),
@@ -206,15 +207,16 @@ export default function Modal({
                     <div className = {styles.radioCards}>
                         {days.map((day) =>
                             <div key = {day}>
-                                <label 
-                                    className = {styles.radioCard}
+                                <label
+                                    className= {styles.radioCard}
                                     onClick = {() =>
                                         setSelectedDate(day)
                                     }
                                 >
-                                    <input 
+                                    <input
                                         type="radio"
                                         name = "date"
+                                        checked = {day === new String(checkin)}
                                     />
                                     {day}
                                 </label>
@@ -223,24 +225,48 @@ export default function Modal({
                     </div>
                     <div>
                         {dinnerSlotData.filter((dinnerSlot) => dinnerSlot.date === selectedDate).map((i) =>
-                                <div className = {styles.dinnerSlots}>
-                                    {i.dinnerSlots.map((a) =>
+                            <div
+                                key = {i.date} 
+                            >
+                                <div  className = {styles.dinnerSlots}>
+                                    <div>フルコース</div>
+                                    {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:15").map((n) =>
                                         <div 
-                                            key = {a.id}
+                                            key = {n.id}
                                             className = {styles.dinnerSlot}
                                         >
                                             <label>
                                                 <input 
                                                     type="radio"
-                                                    value = {a.id}
+                                                    value = {n.id}
                                                     onChange = {(e) =>
                                                         setDinnerSlotId(Number(e.target.value))
                                                     }
-                                                />{a.dinnerStartAt.split("T")[1]}
+                                                />{n.dinnerStartAt.split("T")[1]}
                                             </label>
                                         </div>
                                     )}
                                 </div>
+                                <div  className = {styles.dinnerSlots}>
+                                    <div>ハーフコース</div>
+                                    {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:00").map((n) =>
+                                        <div 
+                                            key = {n.id}
+                                            className = {styles.dinnerSlot}
+                                        >
+                                            <label>
+                                                <input 
+                                                    type="radio"
+                                                    value = {n.id}
+                                                    onChange = {(e) =>
+                                                        setDinnerSlotId(Number(e.target.value))
+                                                    }
+                                                />{n.dinnerStartAt.split("T")[1]}
+                                            </label>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>
