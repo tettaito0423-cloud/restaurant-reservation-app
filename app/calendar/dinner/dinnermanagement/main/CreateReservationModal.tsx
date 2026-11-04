@@ -36,9 +36,9 @@ export default function Modal({
     const [dinnerSlotId, setDinnerSlotId] = useState<number>();
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(date);
-    const [days, setDays] = useState<string[]>([]);
+    const [dates, setDates] = useState<string[]>([]);
     const [isSelected, setIsSelected] = useState(false)
-
+    const [selectedDinnerSlot, setSelectedDinnerSlot] = useState<number[]>()
     const stays = [checkin, checkout]
 
 
@@ -78,14 +78,19 @@ export default function Modal({
             }).format(day).replace(/\//g, "-").replace(" ", "T");
             dayArr.push(`${new Date(fixedDay).getMonth() + 1}/${new Date(fixedDay).getDate()}`)
         }
-        setDays(dayArr);
+        setDates(dayArr);
         setSelectedDate(dayArr[0]);
+        setIsSelected(isSelected);
     };
 
     useEffect(() => {
         getSchedule()
         getDays()
     }, [checkin, checkout]);
+
+
+    {/**チェックを入れると年月日時間(string)をuseState配列に入れる
+        同じ年月日の要素は入らない */}
 
   
     const handleSave = async ()=>{
@@ -103,7 +108,7 @@ export default function Modal({
                 checkout: (checkout),
                 dietaryRestrictions: (dietaryRestrictions),
                 comment: (comment),
-                date: (days),
+                date: (dates),
                 courseType: (courseType),
                 dinnerSlotId: (dinnerSlotId),
             }),
@@ -205,7 +210,7 @@ export default function Modal({
                 <div>
                     <div>夕食</div>
                     <div className = {styles.radioCards}>
-                        {days.map((day) =>
+                        {dates.map((day) =>
                             <div key = {day}>
                                 <label
                                     className= {styles.radioCard}
@@ -216,7 +221,7 @@ export default function Modal({
                                     <input
                                         type="radio"
                                         name = "date"
-                                        checked = {day === new String(checkin)}
+                                        defaultChecked = {day === `${new Date(checkin).getMonth() + 1}/${new Date(checkin).getDate()}`}
                                     />
                                     {day}
                                 </label>
@@ -239,9 +244,12 @@ export default function Modal({
                                                 <input 
                                                     type="radio"
                                                     value = {n.id}
-                                                    onChange = {(e) =>
-                                                        setDinnerSlotId(Number(e.target.value))
-                                                    }
+                                           
+                                                    onChange = {(e) => {
+                                                        
+                                                        setDinnerSlotId(Number(e.target.value)),
+                                                        setCourseType("FULL")
+                                                    }}
                                                 />{n.dinnerStartAt.split("T")[1]}
                                             </label>
                                         </div>
@@ -258,9 +266,10 @@ export default function Modal({
                                                 <input 
                                                     type="radio"
                                                     value = {n.id}
-                                                    onChange = {(e) =>
-                                                        setDinnerSlotId(Number(e.target.value))
-                                                    }
+                                                    onChange = {(e) => {
+                                                        setDinnerSlotId(Number(e.target.value)),
+                                                        setCourseType("HALF")  
+                                                    }}
                                                 />{n.dinnerStartAt.split("T")[1]}
                                             </label>
                                         </div>
