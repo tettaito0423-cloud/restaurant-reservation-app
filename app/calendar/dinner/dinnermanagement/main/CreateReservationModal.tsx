@@ -7,6 +7,7 @@ import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import { stringify } from 'querystring';
 import { time } from 'console';
 import { compareNumbers } from '@fullcalendar/core/internal';
+import { CourseType } from '@prisma/client';
 //import { DinnerSlot } from '@prisma/client';
 
 type Props = {
@@ -37,8 +38,8 @@ export default function Modal({
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(date);
     const [dates, setDates] = useState<string[]>([]);
-    const [isSelected, setIsSelected] = useState(false)
-    const [selectedDinnerSlot, setSelectedDinnerSlot] = useState<number[]>()
+    const [isSelected, setIsSelected] = useState(false);
+    const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{courseType: string, dinnerSlot: string}[]>([]);
     const stays = [checkin, checkout]
 
 
@@ -89,9 +90,18 @@ export default function Modal({
     }, [checkin, checkout]);
 
 
-    {/**チェックを入れると年月日時間(string)をuseState配列に入れる
-        同じ年月日の要素は入らない */}
 
+    const saveDinnerSlot = (dinnerSlot: string, courseType: string) =>{
+        setSelectedDinnerSlots((prev) => [
+            ...prev.filter((selectedDinnerSlot) => 
+                selectedDinnerSlot.dinnerSlot.split("T")[0] !== dinnerSlot.split("T")[0]
+            ),{
+                courseType: courseType,
+                dinnerSlot: dinnerSlot
+            },
+        ]);
+    }
+    console.log("selectedDinnerSlots", selectedDinnerSlots)
   
     const handleSave = async ()=>{
         await fetch('/api/users',{
@@ -229,52 +239,83 @@ export default function Modal({
                         )}
                     </div>
                     <div>
+                        <label>
+                            <input
+                                type="radio"
+                                name = "courseType"
+                                onChange = {() => 
+                                    setCourseType("FULL")
+                                }
+                            />フルコース
+                            <input
+                                type="radio"
+                                name = "courseType"
+                                onChange = {() => 
+                                    setCourseType("HALF")
+                                }
+                            />ハーフコース
+                        </label>
+                    </div>
+                    <div>
                         {dinnerSlotData.filter((dinnerSlot) => dinnerSlot.date === selectedDate).map((i) =>
                             <div
                                 key = {i.date} 
                             >
-                                <div  className = {styles.dinnerSlots}>
-                                    <div>フルコース</div>
-                                    {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:15").map((n) =>
-                                        <div 
-                                            key = {n.id}
-                                            className = {styles.dinnerSlot}
-                                        >
-                                            <label>
-                                                <input 
-                                                    type="radio"
-                                                    value = {n.id}
-                                           
-                                                    onChange = {(e) => {
-                                                        
-                                                        setDinnerSlotId(Number(e.target.value)),
-                                                        setCourseType("FULL")
-                                                    }}
-                                                />{n.dinnerStartAt.split("T")[1]}
-                                            </label>
-                                        </div>
-                                    )}
-                                </div>
-                                <div  className = {styles.dinnerSlots}>
-                                    <div>ハーフコース</div>
-                                    {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:00").map((n) =>
-                                        <div 
-                                            key = {n.id}
-                                            className = {styles.dinnerSlot}
-                                        >
-                                            <label>
-                                                <input 
-                                                    type="radio"
-                                                    value = {n.id}
-                                                    onChange = {(e) => {
-                                                        setDinnerSlotId(Number(e.target.value)),
-                                                        setCourseType("HALF")  
-                                                    }}
-                                                />{n.dinnerStartAt.split("T")[1]}
-                                            </label>
-                                        </div>
-                                    )}
-                                </div>
+                                {courseType === "FULL" && (
+                                    <div  className = {styles.dinnerSlots}>
+                                        <div>フルコース</div>
+                                        {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:15").map((n) =>
+                                            <div 
+                                                key = {n.id}
+                                                className = {styles.dinnerSlot}
+                                            >
+                                                <label>
+                                                    <input 
+                                                        type="radio"
+                                                        name = "dinnerSlot"
+                                                        value = {n.id}
+                                                        checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
+                                                            selectedDinnerSlot.courseType === "FULL" && 
+                                                                selectedDinnerSlot.dinnerSlot === n.dinnerStartAt
+                                                        )}
+                                                        onChange = {(e) => {
+                                                            saveDinnerSlot(n.dinnerStartAt, courseType)
+                                                            setDinnerSlotId(Number(e.target.value))
+                                                        }}
+                                                    />{n.dinnerStartAt.split("T")[1]}
+                                                </label>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            
+                                {courseType === "HALF" && (
+                                    <div  className = {styles.dinnerSlots}>
+                                        <div>ハーフコース</div>
+                                        {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:00").map((n) =>
+                                            <div 
+                                                key = {n.id}
+                                                className = {styles.dinnerSlot}
+                                            >
+                                                <label>
+                                                    <input 
+                                                        type="radio"
+                                                        name = "dinnerSlot"
+                                                        value = {n.id}
+                                                        checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
+                                                            selectedDinnerSlot.courseType === "FULL" && 
+                                                                selectedDinnerSlot.dinnerSlot === n.dinnerStartAt
+                                                        )}
+                                                        onChange = {(e) => {
+                                                            saveDinnerSlot(n.dinnerStartAt, courseType)
+                                                            setDinnerSlotId(Number(e.target.value))
+                                                        }}
+                                                    />{n.dinnerStartAt.split("T")[1]}
+                                                </label>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
