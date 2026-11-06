@@ -138,85 +138,85 @@ export default function Modal({
             >
                 X
             </button>
-
             <div>
-                <p>部屋番号</p>
-                <input
-                    type="number"
-                    value = {roomNumber}
-                    onChange = {(e)=>
-                        setRoomNumber(e.target.value)
-                    }
-                />
-            </div>
-            <div>
-                <div>
-                    <p>大人</p>
+                <label>宿泊情報</label>
+                <div className = {styles.stayInfo}>
+                    <div className = {styles.roomNum}>
+                        <label>部屋番号</label>
                         <input
                             type="number"
-                            value={adultCount}
+                            value = {roomNumber}
                             onChange = {(e)=>
-                                setAdultCount(Number(e.target.value))
+                                setRoomNumber(e.target.value)
                             }
                         />
-                </div>
-                <div>
-                    <div className={styles.child}>
+                    </div>
+                    <div className = {styles.term}>
                         <div>
-                            <p>アンファン</p>
+                            <label className= {styles.checkInOut}>チェックイン</label>
                             <input 
-                                type="number"
-                                value = {childMealCount}
-                                onChange = {(e)=>
-                                    setChildMealCount(Number(e.target.value))
+                                className = {styles.inputCheckInOut}
+                                type="date"
+                                value={checkin}
+                                onChange={(e)=>
+                                    setChekin(e.target.value)
                                 }
                             />
                         </div>
                         <div>
-                            <p>Dチャメ</p>
-                            <input 
-                                type="number"
-                                value = {childNoMealCount}
-                                onChange = {(e)=>
-                                    setChildNoMealCount(Number(e.target.value))
-                                }
+                            <label className={styles.checkInOut}>チェックアウト</label>
+                            <input
+                                className={styles.inputCheckInOut}
+                                type="date"
+                                value={checkout}
+                                onChange={(e)=>{
+                                    setChekout(e.target.value);
+                                }}
                             />
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div>食事制限</div>
-                    <input type="text" />
-                </div>
-                <div>
-                    <div>コメント</div>
-                    <input type="text" />
-                </div>
             </div>
-            <div className = {styles.term}>
-                <div>
-                    <p>チェックイン</p>
-                    <input 
-                        type="date"
-                        value={checkin}
-                        onChange={(e)=>
-                            setChekin(e.target.value)
+
+            <div className = {styles.personalInfo}>
+                <label>大人</label>
+                    <input
+                        type="number"
+                        value={adultCount}
+                        onChange = {(e)=>
+                            setAdultCount(Number(e.target.value))
                         }
                     />
-                </div>
-                <div>
-                    <p>チェックアウト</p>
-                    <input 
-                        type="date"
-                        value={checkout}
-                        onChange={(e)=>{
-                            setChekout(e.target.value);
-                        }}
-                    />
+                <div className={styles.child}>
+                    <label>アンファン</label>
+                        <input 
+                            type="number"
+                            value = {childMealCount}
+                            onChange = {(e)=>
+                                setChildMealCount(Number(e.target.value))
+                            }
+                        />
+
+                    <label>Dチャメ</label>
+                        <input 
+                            type="number"
+                            value = {childNoMealCount}
+                            onChange = {(e)=>
+                                setChildNoMealCount(Number(e.target.value))
+                            }
+                        />
                 </div>
             </div>
             <div>
-                <p>タイムテーブル</p>
+                <label>食事制限</label>
+                    <input type="text" />
+        
+                <label>コメント</label>
+                    <input type="text" />
+            </div>
+            
+            <div>
+                <label>タイムテーブル</label>
                 <div>
                     <div>夕食</div>
                     <div className = {styles.radioCards}>
@@ -258,62 +258,62 @@ export default function Modal({
                     </div>
                     <div>
                         {dinnerSlotData.filter((dinnerSlot) => dinnerSlot.date === selectedDate).map((i) =>
-                            <div
-                                key = {i.date} 
-                            >
+                            <div key = {i.date}>
                                 {courseType === "FULL" && (
                                     <div  className = {styles.dinnerSlots}>
-                                        <div>フルコース</div>
-                                        {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:15").map((n) =>
-                                            <div 
-                                                key = {n.id}
-                                                className = {styles.dinnerSlot}
-                                            >
-                                                <label>
-                                                    <input 
-                                                        type="radio"
-                                                        name = "dinnerSlot"
-                                                        value = {n.id}
-                                                        checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
-                                                            selectedDinnerSlot.courseType === "FULL" && 
-                                                                selectedDinnerSlot.dinnerSlot === n.dinnerStartAt
-                                                        )}
-                                                        onChange = {(e) => {
-                                                            saveDinnerSlot(n.dinnerStartAt, courseType)
-                                                            setDinnerSlotId(Number(e.target.value))
-                                                        }}
-                                                    />{n.dinnerStartAt.split("T")[1]}
-                                                </label>
-                                            </div>
-                                        )}
+                                        <label>フルコース
+                                            {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:15").map((n) =>
+                                                <div 
+                                                    key = {n.id}
+                                                    className = {styles.dinnerSlot}
+                                                >
+                                                    <label>
+                                                        <input 
+                                                            type="radio"
+                                                            name = "dinnerSlot"
+                                                            value = {n.id}
+                                                            checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
+                                                                selectedDinnerSlot.courseType === "FULL" && 
+                                                                    selectedDinnerSlot.dinnerSlot === n.dinnerStartAt
+                                                            )}
+                                                            onChange = {(e) => {
+                                                                saveDinnerSlot(n.dinnerStartAt, "FULL")
+                                                                setDinnerSlotId(Number(e.target.value))
+                                                            }}
+                                                        />{n.dinnerStartAt.split("T")[1]}
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </label>
                                     </div>
                                 )}
                             
                                 {courseType === "HALF" && (
                                     <div  className = {styles.dinnerSlots}>
-                                        <div>ハーフコース</div>
-                                        {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:00").map((n) =>
-                                            <div 
-                                                key = {n.id}
-                                                className = {styles.dinnerSlot}
-                                            >
-                                                <label>
-                                                    <input 
-                                                        type="radio"
-                                                        name = "dinnerSlot"
-                                                        value = {n.id}
-                                                        checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
-                                                            selectedDinnerSlot.courseType === "FULL" && 
-                                                                selectedDinnerSlot.dinnerSlot === n.dinnerStartAt
-                                                        )}
-                                                        onChange = {(e) => {
-                                                            saveDinnerSlot(n.dinnerStartAt, courseType)
-                                                            setDinnerSlotId(Number(e.target.value))
-                                                        }}
-                                                    />{n.dinnerStartAt.split("T")[1]}
-                                                </label>
-                                            </div>
-                                        )}
+                                        <label>ハーフコース
+                                            {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:00").map((n) =>
+                                                <div 
+                                                    key = {n.id}
+                                                    className = {styles.dinnerSlot}
+                                                >
+                                                    <label>
+                                                        <input 
+                                                            type="radio"
+                                                            name = "dinnerSlot"
+                                                            value = {n.id}
+                                                            checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
+                                                                selectedDinnerSlot.courseType === "HALF" && 
+                                                                    selectedDinnerSlot.dinnerSlot === n.dinnerStartAt
+                                                            )}
+                                                            onChange = {(e) => {
+                                                                saveDinnerSlot(n.dinnerStartAt, "HALF")
+                                                                setDinnerSlotId(Number(e.target.value))
+                                                            }}
+                                                        />{n.dinnerStartAt.split("T")[1]}
+                                                    </label>
+                                                </div>
+                                            )}
+                                        </label>
                                     </div>
                                 )}
                             </div>

@@ -20,8 +20,34 @@
   border-radius: 12px;
   width: 700px;
 }
+
+.stayInfo {
+  display: flex;
+  align-items: center;
+  border: 1px solid #8f8f8f;
+  padding: 5px;
+}
+
+.roomNum {
+  margin-left: 10px;
+}
+
 .term {
-    display: flex;
+  display: flex;
+  margin-left: 40px;
+}
+
+.term div {
+  margin-right: 20px;
+}
+
+.checkInOut {
+  display: block;
+  font-size: small;
+}
+
+.inputCheckInOut {
+  display: block;
 }
 
 .child {
