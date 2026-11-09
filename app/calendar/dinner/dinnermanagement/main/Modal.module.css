@@ -76,35 +76,20 @@
 }
 
 
+
 .notes {
   border: 1px solid #cee4ff;
   border-radius: 5px;
 }
 
-.schedules {
-  margin-top: 5px;
-  border: 1px solid #cee4ff;
-  border-radius: 5px;
-}
 
-.meals {
-  display: flex;
-}
 
-.dinner {
-  border: 1px solid #8f8f8f;
-  border-radius: 5px;
-  padding: 5px;
-  margin-top: 5px;
-  background-color: #ffd3c5;
-}
 
 .dates {
   margin-top: 5px;
   display: flex;
   grid-template-columns: repeat(5, 1fr);
 }
-
 .date {
   position: relative;
   display: grid;
@@ -115,21 +100,32 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
 .date:has(input:checked) {
   color: #2e89ff;
   background-color: #2e89ff;
   border-color:  #2e89ff;
   color: #ffffff;
 }
-
 .date input {
   display: none;
 }
-
-
+.schedules {
+  margin-top: 5px;
+  border: 1px solid #cee4ff;
+  border-radius: 5px;
+}
+.meals {
+  display: flex;
+}
+.dinner {
+  border: 1px solid #8f8f8f;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 5px;
+  height: 90px;
+  background-color: #ffd3c5;
+}
 .courseType {
-
   text-align: center;
   align-items: center;
   font-size: small;
@@ -140,7 +136,6 @@
   background-color: #ffffff;
   cursor: pointer;
 }
-
 .courseType:has(input:checked) {
   color: #ff5050;
   background-color: #ff5050;
@@ -150,20 +145,17 @@
 .courseType input {
   display: none;
 }
-
-
 .dinnerSlots {
   display: flex;
   margin-left: 10px;
 }
-
 .dinnerSlot {
   margin: 5px;
 }
-
 .breakfast {
   margin: 5px 0 0 5px;
   border: 1px solid #8f8f8f;
   border-radius: 5px;
   background-color: #cee4ff;
 }
+

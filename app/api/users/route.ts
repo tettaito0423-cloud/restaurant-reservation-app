@@ -12,9 +12,7 @@ export async function POST(req: Request) {
         checkout, 
         dietaryRestrictions, 
         comment,
-        stays,
-        courseType,
-        dinnerSlotId,
+        selectedDinnerSlots,
     } = await req.json();
     
 
@@ -29,12 +27,12 @@ export async function POST(req: Request) {
             dietaryRestrictions: dietaryRestrictions,
             comment: comment,
             stays: {
-                create: stays.map((day: any) => ({
-                    date: day,
+                create: selectedDinnerSlots.map((selectedDinnerSlot: any) => ({
+                    date: new Date(selectedDinnerSlot.date),
                     dinners: {
                         create: {
-                            courseType: day.courseType,
-                            dinnerSlotId: day.dinnerSlotId,
+                            courseType: selectedDinnerSlot.courseType,
+                            dinnerSlotId: selectedDinnerSlot.dinnerSlotId,
                         }
                     }
                 })),
