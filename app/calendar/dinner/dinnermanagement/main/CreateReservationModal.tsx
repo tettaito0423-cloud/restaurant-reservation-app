@@ -31,18 +31,31 @@ export default function Modal({
     const [childMealCount, setChildMealCount] = useState<number>(0);
     const [childNoMealCount, setChildNoMealCount] = useState<number>(0);
     const [checkin, setChekin] = useState<string>(date);
-    const [checkout, setCheckout] = useState<string>(date);
+    const [checkout, setCheckout] = useState<string>("");
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>("");
     const [comment, setComment] = useState<string>("");
     const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{date: string, courseType: string, dinnerSlotId: number, dinnerSlot: string}[]>([]);
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
     const [dates, setDates] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(date);
-    const fromTo = [checkin, checkout]
+
+
+    const createTommorrow = (date: string) => {
+        const currentDate = new Date(date);
+        currentDate.setDate(currentDate.getDate() + 1);
+        const tommorrow = new Intl.DateTimeFormat("ja-JP", {
+            timeZone: "Asia/Tokyo",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).format(currentDate).replace(/\//g, "-").replace(" ", "T");
+        setCheckout(String(tommorrow))
+    };
 
 
     {/**APIからデータを取得 */}
     const getSchedule = async ()=> {
+        const fromTo = [checkin, checkout]
         const schedule = await fetchSchedule(fromTo);
         const result = Object.groupBy(
             schedule,
@@ -62,7 +75,6 @@ export default function Modal({
     const getDays = () => {
         const start = new Date(checkin);
         const end = new Date(checkout);
-        new Date(end.setDate(end.getDate() + 1))
 
         const numberOfDays = Math.floor(
             Number(end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
@@ -122,17 +134,21 @@ export default function Modal({
     };
 
     useEffect(() => {
+        createTommorrow(date)
+    }, []);
+
+    useEffect(() => {
+        if(!checkout)return;
         getSchedule()
         getDays()
     }, [checkin, checkout]);
 
-    console.log("fromTo", fromTo)
 
 
     return(
     <div className={styles.modalOverlay}>
         <div className={styles.modal}>
-            <div style ={{display: "flex", justifyContent: "space-between", height: "30px"}}>
+            <div style ={{display: "flex", justifyContent: "space-between", marginBottom: "1%"}}>
                 <label>予約登録</label>
                 <button
                     style = {{}}
@@ -192,40 +208,43 @@ export default function Modal({
             </div>
             <div style ={{display: "flex", marginTop: "5px", justifyContent: "space-between"}}>
                 <div className = {styles.personalInfo}>
+                    <div style = {{backgroundColor: "#e4f0ff"}}>
+                        <label>
+                            人数・プラン
+                        </label>
+                    </div>
                     <div>
-                        <div style = {{backgroundColor: "#e4f0ff"}}>
-                            <label>
-                                人数・プラン
-                            </label>
+                        <div>
+                            <label className = {styles.personalLabel}>大人</label>
+                            <input
+                                style = {{width: "30%"}}
+                                type="number"
+                                value={adultCount}
+                                onChange = {(e)=>
+                                    setAdultCount(Number(e.target.value))
+                                }
+                            />
                         </div>
-                        <label className = {styles.personalLabel}>大人</label>
-                        <input
-                            type="number"
-                            value={adultCount}
-                            onChange = {(e)=>
-                                setAdultCount(Number(e.target.value))
-                            }
-                        />
-                    </div>
-                    <div>
-                        <label className = {styles.personalLabel}>子供(食事あり)</label>
-                        <input 
-                            type="number"
-                            value = {childMealCount}
-                            onChange = {(e)=>
-                                setChildMealCount(Number(e.target.value))
-                            }
-                        />
-                    </div>
-                    <div>
-                        <label className = {styles.personalLabel}>子供(食事なし)</label>
-                        <input 
-                            type="number"
-                            value = {childNoMealCount}
-                            onChange = {(e)=>
-                                setChildNoMealCount(Number(e.target.value))
-                            }
-                        />
+                        <div>
+                            <label className = {styles.personalLabel}>子供(食事あり)</label>
+                            <input 
+                                type="number"
+                                value = {childMealCount}
+                                onChange = {(e)=>
+                                    setChildMealCount(Number(e.target.value))
+                                }
+                            />
+                        </div>
+                        <div>
+                            <label className = {styles.personalLabel}>子供(食事なし)</label>
+                            <input 
+                                type="number"
+                                value = {childNoMealCount}
+                                onChange = {(e)=>
+                                    setChildNoMealCount(Number(e.target.value))
+                                }
+                            />
+                        </div>
                     </div>
                 </div>
         
