@@ -165,7 +165,7 @@ export default function Modal({
                 </div>
                 <div className = {styles.details}>
                     <div className = {styles.roomNum}>
-                        <label>部屋番号</label>
+                        <label style = {{fontSize: "large"}}>部屋番号</label>
                         <input
                             type="number"
                             value = {roomNumber}
@@ -174,8 +174,8 @@ export default function Modal({
                             }
                         />
                     </div>
-                    <div>
-                        <label>
+                    <div style = {{marginLeft: "5%"}}>
+                        <label style = {{fontSize: "large"}}>
                             <input type="checkbox"/>外来予約
                         </label>
                     </div>
@@ -206,77 +206,77 @@ export default function Modal({
                     </div>
                 </div>
             </div>
-            <div style ={{display: "flex", marginTop: "5px", justifyContent: "space-between"}}>
-                <div className = {styles.personalInfo}>
-                    <div style = {{backgroundColor: "#e4f0ff"}}>
-                        <label>
-                            人数・プラン
-                        </label>
-                    </div>
-                    <div>
-                        <div>
-                            <label className = {styles.personalLabel}>大人</label>
-                            <input
-                                style = {{width: "30%"}}
-                                type="number"
-                                value={adultCount}
-                                onChange = {(e)=>
-                                    setAdultCount(Number(e.target.value))
-                                }
-                            />
-                        </div>
-                        <div>
-                            <label className = {styles.personalLabel}>子供(食事あり)</label>
-                            <input 
-                                type="number"
-                                value = {childMealCount}
-                                onChange = {(e)=>
-                                    setChildMealCount(Number(e.target.value))
-                                }
-                            />
-                        </div>
-                        <div>
-                            <label className = {styles.personalLabel}>子供(食事なし)</label>
-                            <input 
-                                type="number"
-                                value = {childNoMealCount}
-                                onChange = {(e)=>
-                                    setChildNoMealCount(Number(e.target.value))
-                                }
-                            />
-                        </div>
-                    </div>
+
+
+            <div className = {styles.personalInfo}>
+                <div style = {{backgroundColor: "#e4f0ff"}}>
+                    <label>
+                        人数・プラン
+                    </label>
                 </div>
-        
-                <div className = {styles.notes}>
-                    <div style = {{backgroundColor: "#e4f0ff"}}>
-                        <label>備考</label>
+                <div>
+                    <div className = {styles.peopleNum}>
+                        <label className = {styles.personalLabel}>大人</label>
+                        <input
+                            type="number"
+                            value={adultCount}
+                            onChange = {(e)=>
+                                setAdultCount(Number(e.target.value))
+                            }
+                        />
                     </div>
-                    <div style = {{padding: "5px"}}>
-                        <div>
-                            <label style = {{verticalAlign: "top"}}>食事制限</label>
-                            <textarea
-                                cols = {40}
-                                value = {dietaryRestrictions}
-                                onChange = {(e) => {
-                                    setDietaryRestrictions(e.target.value)
-                                }}
-                            />
-                        </div>
-                        <div>
-                            <label style = {{verticalAlign: "top"}}>コメント</label>
-                            <textarea
-                                rows = {5}
-                                cols = {40}
-                                value = {comment}
-                                onChange = {(e) => {
-                                    setComment(e.target.value)
-                                }}
-                            />
-                        </div>
+                    <div className = {styles.peopleNum}>
+                        <label className = {styles.personalLabel}>子供(食事あり)</label>
+                        <input 
+                            type="number"
+                            value = {childMealCount}
+                            onChange = {(e)=>
+                                setChildMealCount(Number(e.target.value))
+                            }
+                        />
+                    </div>
+                    <div className = {styles.peopleNum}>
+                        <label className = {styles.personalLabel}>子供(食事なし)</label>
+                        <input 
+                            type="number"
+                            value = {childNoMealCount}
+                            onChange = {(e)=>
+                                setChildNoMealCount(Number(e.target.value))
+                            }
+                        />
                     </div>
                 </div>
             </div>
+    
+            <div className = {styles.notes}>
+                <div style = {{backgroundColor: "#e4f0ff"}}>
+                    <label>備考</label>
+                </div>
+                <div>
+                    <div>
+                        <label style = {{verticalAlign: "top"}}>食事制限</label>
+                        <textarea
+                            cols = {40}
+                            value = {dietaryRestrictions}
+                            onChange = {(e) => {
+                                setDietaryRestrictions(e.target.value)
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <label style = {{verticalAlign: "top"}}>コメント</label>
+                        <textarea
+                            rows = {5}
+                            cols = {40}
+                            value = {comment}
+                            onChange = {(e) => {
+                                setComment(e.target.value)
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+          
        
             
             <div className = {styles.schedules}>
