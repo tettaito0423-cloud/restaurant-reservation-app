@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
 import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import DinnerManager from './DinnerManager'
-import SelectPlan from './SelectPlan'
 import NarrowDown from './NarrowDown'
 import CreateMealSlotModal from './CreateMealSlotModal'
 import CreateReservationModal from './CreateReservationModal'
@@ -20,70 +19,40 @@ export default function Home() {
       const dates:string[] = [];
       dates.push(date);
       const router = useRouter();
-      const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
-      const [reservationData, setReservationData] = useState<Reservation[]>([]);
       const [modalType, setModalType] = useState<'mealSlot'|'reservation' |null>(null);
-      const [reservation, setReservation] = useState<Reservation| null>(null);
       const [selectedDinnerSlotIds, setSelectedDinnerSlotId] = useState<number[]>([]);
-      const [selectedGuestCount, setSelectedGuestCount] = useState<number[]>([]);
       const smallParty = 2;
       const mediumParty = 3;
       const largeParty = 4;
 
 
+      const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
       const getSchedule = async ()=> {
             const schedule = await fetchSchedule(dates);
             setDinnerSlotData(schedule);
+      };
+
+
+      const [reservationData, setReservationData] = useState<Reservation[]>([]);
+      const getAllReservation = async ()=> {
+            const reservations = await fetchReservation(date);
+            const reservation = reservations.map((reservation:any) => {
+                  console.log("reservation.reservation", reservation.reservation)
+                  console.log("reservation.dinners", reservation.dinners)
+            })
+            setReservationData(reservations);
       };
 
       useEffect(() => {
             getSchedule()
             dinnerSlotData.map((e)=>{
                   setSelectedDinnerSlotId([...selectedDinnerSlotIds, e.id])
-                  
             });
       }, []);
 
-      const getReservation = async ()=> {
-            const reservations = await fetchReservation(date);
-            setReservationData(reservations);
-      };
-
-      useEffect(() => {   
-            if (dinnerSlotData.length < 2) return;
-            getReservation();
+      useEffect(() => {
+            getAllReservation();
       }, [dinnerSlotData]);
-
-
-
-      {/*夕食時間絞り込み 
-      const updateSelectedDinnerSlotId = (e:number) => {
-            if (selectedDinnerSlotIds.includes(e)) {
-                  setSelectedDinnerSlotId(
-                        selectedDinnerSlotIds.filter((dinnerSlotId)=>(
-                              e !== dinnerSlotId
-                        ))
-                  );
-            } else {
-                  setSelectedDinnerSlotId([...selectedDinnerSlotIds, e]);
-            }
-      };
-      */}
-      {/*人数絞り込み 
-      const updateSelectedGuestCount = (i:number) =>{
-            if (selectedGuestCount.includes(i)) {
-                  setSelectedGuestCount(
-                        selectedGuestCount.filter((guestCount)=>(
-                              i !== guestCount
-                        ))
-                  );
-            } else {
-                  setSelectedGuestCount([...selectedGuestCount, i])
-            }
-      };
-      */}
-      
-
 
 
       return(
@@ -110,9 +79,24 @@ export default function Home() {
 
 
                                     {/*プラン別予約一覧*/}
-                                    <SelectPlan
-                                          reservationData = {reservationData}
-                                    />
+                                    <div>
+                                          <button
+                                          className={`${styles.btn} ${styles.btnLine}`}
+                                          >
+                                          すべて
+                                          {reservationData.length}
+                                          </button>
+                                          <button
+                                          className={`${styles.btn} ${styles.btnLine}`}
+                                          >
+                                          夕食
+                                          </button>
+                                          <button
+                                          className={`${styles.btn} ${styles.btnLine}`}
+                                          >
+                                          朝食
+                                          </button>
+                                    </div>
 
 
                                     {/*絞り込み
@@ -128,10 +112,7 @@ export default function Home() {
 
 
                                     {/*予約一覧*/}
-                                    <div className={styles.lists}>
-                                          
-                                          
-                                    </div>
+                                    <div className={styles.lists}></div>
                               </div>
                               {/*予約状況*/}
                               <div className={styles.timeTables}> 

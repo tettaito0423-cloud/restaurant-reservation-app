@@ -33,7 +33,7 @@ export default function Home() {
     }));
     setEvents(events)
   };
-
+  console.log("firstAndLastDays", firstAndLastDays)
 
   useEffect(() => {
     getSchedule()
@@ -54,6 +54,8 @@ export default function Home() {
           minute: "2-digit"
         }}
         datesSet={(info) => {
+          console.log(info.start)
+          console.log(info.end)
           setFirstAndLastDays([String(info.start), String(info.end)])
         }}
         dateClick={(info) =>{

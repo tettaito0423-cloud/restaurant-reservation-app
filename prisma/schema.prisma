@@ -41,13 +41,13 @@ model Stay {
   reservationId Int
   date          DateTime
   reservation   Reservation @relation(fields: [reservationId], references: [id])
-  dinners       Dinner[]
-  breakfasts    Breakfast[]
+  dinners       Dinner?
+  breakfasts    Breakfast?
 }
 
 model Dinner {
   id            Int   @id @default(autoincrement())
-  stayId        Int
+  stayId        Int   @unique
   courseType    CourseType?
   dinnerSlotId  Int?
   stay          Stay @relation(fields: [stayId], references: [id])
@@ -56,7 +56,7 @@ model Dinner {
 
 model Breakfast {
   id              Int   @id @default(autoincrement())
-  stayId          Int
+  stayId          Int   @unique
   breakfastSlotId Int
   stay            Stay @relation(fields: [stayId], references: [id])
   breakfastSlot   BreakfastSlot? @relation(fields: [breakfastSlotId], references: [id])

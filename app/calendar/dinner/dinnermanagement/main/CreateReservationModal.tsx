@@ -25,7 +25,7 @@ export default function Modal({
     date,
     onClose,
  }:Props){
-    const [courseType, setCourseType] = useState<'FULL'|'HALF'|null>(null);
+    const [courseType, setCourseType] = useState<'FULL'|'HALF'|null>("FULL");
     const [roomNumber, setRoomNumber] = useState<string>("");
     const [adultCount, setAdultCount] = useState<number>(0);
     const [childMealCount, setChildMealCount] = useState<number>(0);
@@ -34,10 +34,8 @@ export default function Modal({
     const [checkout, setCheckout] = useState<string>("");
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>("");
     const [comment, setComment] = useState<string>("");
-    const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{date: string, courseType: string, dinnerSlotId: number, dinnerSlot: string}[]>([]);
-    const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
-    const [dates, setDates] = useState<string[]>([]);
-    const [selectedDate, setSelectedDate] = useState<string>(date);
+
+    
 
 
     const createTommorrow = (date: string) => {
@@ -50,10 +48,12 @@ export default function Modal({
             day: "2-digit",
         }).format(currentDate).replace(/\//g, "-").replace(" ", "T");
         setCheckout(String(tommorrow))
+        setCourseType("FULL")
     };
 
 
     {/**APIからデータを取得 */}
+    const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
     const getSchedule = async ()=> {
         const fromTo = [checkin, checkout]
         const schedule = await fetchSchedule(fromTo);
@@ -72,6 +72,8 @@ export default function Modal({
 
 
     {/**checkinとcheckoutから宿泊日全てを取得 */}
+    const [dates, setDates] = useState<string[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string>(date);
     const getDays = () => {
         const start = new Date(checkin);
         const end = new Date(checkout);
@@ -97,7 +99,7 @@ export default function Modal({
     };
 
 
-
+    const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{date: string, courseType: string, dinnerSlotId: number, dinnerSlot: string}[]>([]);
     const saveDinnerSlot = (courseType: string, dinnerSlotId: number, dinnerSlot: string) =>{
         setSelectedDinnerSlots((prev) => [
             ...prev.filter((selectedDinnerSlot) => 
@@ -160,7 +162,7 @@ export default function Modal({
                 </button>
             </div>
             <div className = {styles.stayInfo}>
-                <div className = {styles.stayLabel}>
+                <div className = {styles.Label}>
                     <label>宿泊情報</label>
                 </div>
                 <div className = {styles.details}>
@@ -209,7 +211,7 @@ export default function Modal({
 
 
             <div className = {styles.personalInfo}>
-                <div style = {{backgroundColor: "#e4f0ff"}}>
+                <div className= {styles.Label}>
                     <label>
                         人数・プラン
                     </label>
@@ -249,7 +251,7 @@ export default function Modal({
             </div>
     
             <div className = {styles.notes}>
-                <div style = {{backgroundColor: "#e4f0ff"}}>
+                <div className = {styles.Label}>
                     <label>備考</label>
                 </div>
                 <div>
@@ -311,6 +313,7 @@ export default function Modal({
                                             <input
                                                 type="radio"
                                                 name = "courseType"
+                                                checked = {courseType === "FULL"}
                                                 onChange = {() => 
                                                     setCourseType("FULL")
                                                 }

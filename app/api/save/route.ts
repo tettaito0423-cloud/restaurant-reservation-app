@@ -31,11 +31,13 @@ export async function POST(req: Request) {
 
 
 export async function GET(req: Request){
+  try{
   const { searchParams } = new URL(req.url);
   const datesParams = searchParams.get("dates");
   const dates = datesParams ? datesParams.split(","): [];
   const startDate = 0; 
   const endDate = 1;
+  console.log("dates", dates)
 
 
   if(dates.length === 0){
@@ -62,6 +64,7 @@ export async function GET(req: Request){
         },
       },
     });
+    console.log("foundData",foundData)
     const result = foundData.map((item) =>{
       const date = new Date(item.dinnerStartAt);
 
@@ -80,6 +83,14 @@ export async function GET(req: Request){
         dinnerStartAt: japanTime,
       };
     });
+    console.log("result", result)
     return NextResponse.json(result);
   }
+  } catch (error) {
+  console.error("GET API ERROR:", error);
+  return NextResponse.json(
+    { error: String(error) },
+    { status: 500 }
+  );
+}
 }
