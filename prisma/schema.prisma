@@ -50,6 +50,7 @@ model Dinner {
   stayId        Int   @unique
   courseType    CourseType?
   dinnerSlotId  Int?
+  isArrived     Boolean @default(false)
   stay          Stay @relation(fields: [stayId], references: [id])
   dinnerSlot    DinnerSlot? @relation(fields: [dinnerSlotId], references: [id])
 }

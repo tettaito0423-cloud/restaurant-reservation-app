@@ -3,7 +3,6 @@
 import styles from './Modal.module.css';
 import { useState, useEffect } from 'react';
 import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
-import {fetchReservation, Reservation} from '../../../../../lib/getReservations'
 import { stringify } from 'querystring';
 import { time } from 'console';
 import { compareNumbers } from '@fullcalendar/core/internal';
@@ -169,7 +168,7 @@ export default function Modal({
                     <div className = {styles.roomNum}>
                         <label style = {{fontSize: "large"}}>部屋番号</label>
                         <input
-                            type="number"
+                            type="text"
                             value = {roomNumber}
                             onChange = {(e)=>
                                 setRoomNumber(e.target.value)
@@ -278,7 +277,7 @@ export default function Modal({
                     </div>
                 </div>
             </div>
-          
+
        
             
             <div className = {styles.schedules}>
@@ -384,6 +383,11 @@ export default function Modal({
                                             )}
                                         </div>
                                     )}
+                                    <div>
+                                        <label>
+                                            <input type='checkbox'/>未定
+                                        </label>
+                                    </div>
                                 </div>
                             )}
                         </div>

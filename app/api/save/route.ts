@@ -31,13 +31,12 @@ export async function POST(req: Request) {
 
 
 export async function GET(req: Request){
-  try{
+
   const { searchParams } = new URL(req.url);
   const datesParams = searchParams.get("dates");
   const dates = datesParams ? datesParams.split(","): [];
   const startDate = 0; 
   const endDate = 1;
-  console.log("dates", dates)
 
 
   if(dates.length === 0){
@@ -46,7 +45,7 @@ export async function GET(req: Request){
     const start = new Date(dates[0]);
     const end = new Date(start);
     end.setDate(end.getDate() + 1);
-    const dateData = await prisma.dinnerSlot.findMany({
+    const foundData = await prisma.dinnerSlot.findMany({
       where: {
         dinnerStartAt: {
           gte: start,
@@ -54,17 +53,6 @@ export async function GET(req: Request){
         }
       }
     })
-    return NextResponse.json(dateData);
-  }else{
-    const foundData = await prisma.dinnerSlot.findMany({
-      where: {
-        dinnerStartAt: {
-          gte: new Date(dates[startDate]),
-          lt: new Date(dates[endDate]),
-        },
-      },
-    });
-    console.log("foundData",foundData)
     const result = foundData.map((item) =>{
       const date = new Date(item.dinnerStartAt);
 
@@ -77,7 +65,33 @@ export async function GET(req: Request){
         minute: "2-digit",
         hourCycle: "h23",
       }).format(date).replace(/\//g, "-").replace(" ", "T");
+      return {
+        ...item,
+        dinnerStartAt: japanTime,
+      };
+    });
+    return NextResponse.json(result);
+  }else{
+    const foundData = await prisma.dinnerSlot.findMany({
+      where: {
+        dinnerStartAt: {
+          gte: new Date(dates[startDate]),
+          lt: new Date(dates[endDate]),
+        },
+      },
+    });
+    const result = foundData.map((item) =>{
+      const date = new Date(item.dinnerStartAt);
 
+      const japanTime = new Intl.DateTimeFormat("ja-JP", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }).format(date).replace(/\//g, "-").replace(" ", "T");
       return {
         ...item,
         dinnerStartAt: japanTime,
@@ -86,11 +100,4 @@ export async function GET(req: Request){
     console.log("result", result)
     return NextResponse.json(result);
   }
-  } catch (error) {
-  console.error("GET API ERROR:", error);
-  return NextResponse.json(
-    { error: String(error) },
-    { status: 500 }
-  );
-}
 }
