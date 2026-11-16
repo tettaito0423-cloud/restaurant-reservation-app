@@ -33,6 +33,7 @@ export async function POST(req: Request) {
                         create: {
                             courseType: selectedDinnerSlot.courseType,
                             dinnerSlotId: selectedDinnerSlot.dinnerSlotId,
+                            isComfirmed: selectedDinnerSlot.isComfirmed,
                         }
                     }
                 })),

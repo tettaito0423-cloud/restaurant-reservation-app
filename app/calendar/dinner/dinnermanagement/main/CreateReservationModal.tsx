@@ -33,6 +33,7 @@ export default function Modal({
     const [checkout, setCheckout] = useState<string>("");
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>("");
     const [comment, setComment] = useState<string>("");
+    const [isComfirmed, setIsComfirmed] = useState<Boolean>(true);
 
     
 
@@ -98,8 +99,10 @@ export default function Modal({
     };
 
 
-    const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{date: string, courseType: string, dinnerSlotId: number, dinnerSlot: string}[]>([]);
-    const saveDinnerSlot = (courseType: string, dinnerSlotId: number, dinnerSlot: string) =>{
+    const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{
+        date: string, courseType: string, dinnerSlotId: number | null, dinnerSlot: string | null
+    }[]>([]);
+    const saveDinnerSlot = (courseType: string, dinnerSlotId: number | null, isComfirmed: Boolean, dinnerSlot: string | null) => {
         setSelectedDinnerSlots((prev) => [
             ...prev.filter((selectedDinnerSlot) => 
                 selectedDinnerSlot.dinnerSlot.split("T")[0] !== dinnerSlot.split("T")[0]
@@ -107,6 +110,7 @@ export default function Modal({
                 date: dinnerSlot.split("T")[0],
                 courseType: courseType,
                 dinnerSlotId: dinnerSlotId,
+                isComfirmed: isComfirmed,
                 dinnerSlot: dinnerSlot
             },
         ]);
@@ -128,6 +132,7 @@ export default function Modal({
                 checkout: new Date(checkout),
                 dietaryRestrictions: (dietaryRestrictions),
                 comment: (comment),
+                isComfirmed: (isComfirmed),
                 selectedDinnerSlots: (selectedDinnerSlots)
             }),
         });
@@ -246,6 +251,9 @@ export default function Modal({
                             }
                         />
                     </div>
+                    <div>
+
+                    </div>
                 </div>
             </div>
     
@@ -349,12 +357,21 @@ export default function Modal({
                                                                     selectedDinnerSlot.dinnerSlotId === n.id
                                                             )}
                                                             onChange = {(e) => {
-                                                                saveDinnerSlot("FULL", n.id, n.dinnerStartAt)
+                                                                saveDinnerSlot("FULL", n.id, true, n.dinnerStartAt)
                                                             }}
                                                         />{n.dinnerStartAt.split("T")[1]}
                                                     </label>
                                                 </div>
                                             )}
+                                            <label>
+                                                <input 
+                                                    type='radio'
+                                                    name = "dinnerSlot"
+                                                    onChange={() => 
+                                                        saveDinnerSlot("FULL", null, false, null)
+                                                    }
+                                                />時間未定
+                                            </label>
                                         </div>
                                     )}
                                 
@@ -375,7 +392,7 @@ export default function Modal({
                                                                     selectedDinnerSlot.dinnerSlotId === n.id
                                                             )}
                                                             onChange = {(e) => {
-                                                                saveDinnerSlot("HALF", n.id, n.dinnerStartAt)
+                                                                saveDinnerSlot("HALF", n.id, true, n.dinnerStartAt)
                                                             }}
                                                         />{n.dinnerStartAt.split("T")[1]}
                                                     </label>
@@ -384,9 +401,7 @@ export default function Modal({
                                         </div>
                                     )}
                                     <div>
-                                        <label>
-                                            <input type='checkbox'/>未定
-                                        </label>
+
                                     </div>
                                 </div>
                             )}
