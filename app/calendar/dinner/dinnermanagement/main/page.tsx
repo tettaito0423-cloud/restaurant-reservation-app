@@ -10,6 +10,7 @@ import NarrowDown from './NarrowDown'
 import CreateMealSlotModal from './CreateMealSlotModal'
 import CreateReservationModal from './CreateReservationModal'
 import { discoverValidationDepths } from 'next/dist/server/app-render/instant-validation/instant-validation';
+import { resolveSoa } from 'dns';
 
 export type Reservation = {
   id: number;
@@ -21,7 +22,9 @@ export type Reservation = {
   checkout: string;
   dietaryRestrictions: string;
   comment: string;
+  isComfirmed: boolean;
   dinnerSlotId: number;
+  dinnerStartAt: string;
   courseType: string;
 }
 
@@ -43,25 +46,39 @@ export default function Home() {
       const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlot[]>([]);
       const getSchedule = async ()=> {
             const schedule = await fetchSchedule(dates);
-            console.log("schedule", schedule)
             setDinnerSlotData(schedule);
       };
       
 
-
-      const [reservationData, setReservationData] = useState<Reservation[]>([]);
+      {/**APIからデータ取得 */}
+      const [reservations, setReservations] = useState<Reservation[]>([]);
       const getAllReservation = async ()=> {
-            const reservationsData = await fetchReservation(date);
-            const reservations = reservationsData.map((reservation:any) => {
-                  const result: Reservation = {
-                        ...reservation.reservation,
-                        dinnerSlotId: reservation.dinners.dinnerSlotId,
-                        courseType: reservation.dinners.courseType
-                  };
-                  return result
-            });
-            setReservationData(reservations);
+            const reservationData = await fetchReservation(date);
+            const formattedReservations: Reservation[] = reservationData.map((item:any) => ({
+                  id: item.reservation.id,
+                  roomNumber: item.reservation.roomNumber,
+                  adultCount: item.reservation.adultCount,
+                  childMealCount: item.reservation.childMealCount,
+                  childNoMealCount: item.reservation.childNoMealCount,
+                  checkin: item.reservation.checkin,
+                  checkout: item.reservation.checkout,
+                  dietaryRestrictions: item.reservation.dietaryRestrictions,
+                  comment: item.reservation.comment,
+                  isComfirmed: item.dinners.isComfirmed,
+                  dinnerSlotId: item.dinners.dinnerSlotId,
+                  courseType: item.dinners.courseType,
+            }));
+            setReservations(formattedReservations);
       };
+
+      const displayReservation = reservations.filter((reservation) =>{
+            if (mealType === "both"){
+                  return reservation
+            } else if (mealType === "dinner") {
+                  return reservation.courseType !== null;
+            }
+      })
+
 
       useEffect(() => {
             getSchedule()
@@ -71,9 +88,10 @@ export default function Home() {
       }, []);
 
       useEffect(() => {
-            getAllReservation();
-      }, [dinnerSlotData]);
-      console.log("dinnerSlotData", dinnerSlotData)
+            if(modalType === null){
+                  getAllReservation();
+            }
+      }, [modalType]);
 
 
       return(
@@ -124,7 +142,7 @@ export default function Home() {
                                     {mealType === "dinner" &&(
                                           <div>
                                                 {dinnerSlotData.map((dinnerSlot) =>
-                                                      <div>
+                                                      <div key = {dinnerSlot.id}>
                                                             <button className={`${styles.btn} ${styles.btnLine}`}>
                                                                   {dinnerSlot.dinnerStartAt.split("T")[1]}
                                                             </button>
@@ -142,75 +160,32 @@ export default function Home() {
                                                             <th>大人</th>
                                                             <th>子供（食事あり）</th>
                                                             <th>子供（食事なし）</th>
+                                                            <th>夕食時間</th>
                                                             <th>食事制限</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody>
-                                                      {reservationData.map((reservation) => 
-                                                            <tr key={reservation.id}>
+                                                      {reservations.map((reservation) => 
+                                                            <tr key = {reservation.id}>
                                                                   <td>{reservation.roomNumber}</td>
                                                                   <td>{reservation.adultCount}</td>
                                                                   <td>{reservation.childMealCount}</td>
                                                                   <td>{reservation.childNoMealCount}</td>
+                                                                  <td>
+                                                                        {(dinnerSlotData.find((slot) => 
+                                                                              slot.id === reservation.dinnerSlotId
+                                                                        )?.dinnerStartAt)?.split("T")[1]}
+                                                                  </td>
                                                                   <td>{reservation.dietaryRestrictions}</td>
                                                             </tr>
                                                       )}
                                                 </tbody>
                                           </table> 
                                     )}
-
-                                    {mealType === "dinner" &&(
-                                          <table>
-                                                <thead>
-                                                      <tr>
-                                                            <th>部屋番号</th>
-                                                            <th>大人</th>
-                                                            <th>子供（食事あり）</th>
-                                                            <th>子供（食事なし）</th>
-                                                            <th>食事制限</th>
-                                                      </tr>
-                                                </thead>
-                                                <tbody>
-                                                      {reservationData.map((reservation) => 
-                                                            <tr key={reservation.id}>
-                                                                  <td>{reservation.roomNumber}</td>
-                                                                  <td>{reservation.adultCount}</td>
-                                                                  <td>{reservation.childMealCount}</td>
-                                                                  <td>{reservation.childNoMealCount}</td>
-                                                                  <td>{reservation.dietaryRestrictions}</td>
-                                                            </tr>
-                                                      )}
-                                                </tbody>
-                                          </table> 
-                                    )}
-                                
-
-
-                                    {/*絞り込み
-                                    <NarrowDown
-                                          dinnerSlotData = {dinnerSlotData}
-                                          selectedDinnerSlotIds = {selectedDinnerSlotIds}
-                                          selectedGuestCount = {selectedGuestCount}
-                                          smallParty = {smallParty}
-                                          mediumParty = {mediumParty}
-                                          largeParty = {largeParty}
-                                    />
-                                    */}
 
 
                                     {/*予約一覧*/}
                                     <div className={styles.lists}></div>
-                              </div>
-                              {/*予約状況*/}
-                              <div className={styles.timeTables}> 
-                                    <DinnerManager
-                                          dinnerSlotData = {dinnerSlotData}
-                                          reservationData = {reservationData}
-                                          smallParty = {smallParty}
-                                          mediumParty = {mediumParty}
-                                          largeParty = {largeParty}
-                                    />
-                                   
                               </div>
                         </div>
 

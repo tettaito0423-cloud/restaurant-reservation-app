@@ -5,5 +5,6 @@ export const fetchReservation = async (date: string)=>{
       `/api/users?date=${date}`
     );
     const json= await res.json();
+    console.log("jason",json)
     return json;
 };

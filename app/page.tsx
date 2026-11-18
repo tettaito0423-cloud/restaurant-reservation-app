@@ -34,7 +34,6 @@ export default function Home() {
     setEvents(events)
   };
 
-  console.log("firstAndLastDays", firstAndLastDays)
 
   useEffect(() => {
     getSchedule()

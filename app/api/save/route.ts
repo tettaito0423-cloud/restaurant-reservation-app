@@ -55,7 +55,6 @@ export async function GET(req: Request){
     })
     const result = foundData.map((item) =>{
       const date = new Date(item.dinnerStartAt);
-
       const japanTime = new Intl.DateTimeFormat("ja-JP", {
         timeZone: "Asia/Tokyo",
         year: "numeric",
@@ -82,7 +81,6 @@ export async function GET(req: Request){
     });
     const result = foundData.map((item) =>{
       const date = new Date(item.dinnerStartAt);
-
       const japanTime = new Intl.DateTimeFormat("ja-JP", {
         timeZone: "Asia/Tokyo",
         year: "numeric",

@@ -3,11 +3,6 @@
 import styles from './Modal.module.css';
 import { useState, useEffect } from 'react';
 import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
-import { stringify } from 'querystring';
-import { time } from 'console';
-import { compareNumbers } from '@fullcalendar/core/internal';
-import { CourseType } from '@prisma/client';
-//import { DinnerSlot } from '@prisma/client';
 
 type Props = {
     date: string;
@@ -33,7 +28,6 @@ export default function Modal({
     const [checkout, setCheckout] = useState<string>("");
     const [dietaryRestrictions, setDietaryRestrictions] = useState<string>("");
     const [comment, setComment] = useState<string>("");
-    const [isComfirmed, setIsComfirmed] = useState<Boolean>(true);
 
     
 
@@ -54,13 +48,13 @@ export default function Modal({
 
     {/**APIからデータを取得 */}
     const [dinnerSlotData, setDinnerSlotData] = useState<DinnerSlotData[]>([]);
-    const getSchedule = async ()=> {
+    const getSchedule = async () => {
         const fromTo = [checkin, checkout]
         const schedule = await fetchSchedule(fromTo);
         const result = Object.groupBy(
             schedule,
             (element) => (
-                `${String(new Date(element.dinnerStartAt).getMonth() + 1)}/${String(new Date(element.dinnerStartAt).getDate())}`
+                `${String(new Date(element.dinnerStartAt).getFullYear())}/${String(new Date(element.dinnerStartAt).getMonth() + 1)}/${String(new Date(element.dinnerStartAt).getDate())}`
             )
         ); 
         const a = Object.entries(result).map(([key, value]) => ({
@@ -92,7 +86,7 @@ export default function Modal({
                 month: "2-digit",
                 day: "2-digit",
             }).format(day).replace(/\//g, "-").replace(" ", "T");
-            dayArr.push(`${new Date(fixedDay).getMonth() + 1}/${new Date(fixedDay).getDate()}`)
+            dayArr.push(`${new Date(fixedDay).getFullYear()}/${new Date(fixedDay).getMonth() + 1}/${new Date(fixedDay).getDate()}`)
         }
         setDates(dayArr);
         setSelectedDate(dayArr[0]);
@@ -100,14 +94,18 @@ export default function Modal({
 
 
     const [selectedDinnerSlots, setSelectedDinnerSlots] = useState<{
-        date: string, courseType: string, dinnerSlotId: number | null, dinnerSlot: string | null
+        date: string,
+        courseType: string,
+        dinnerSlotId: number | null,
+        isComfirmed: boolean,
+        dinnerSlot: string
     }[]>([]);
-    const saveDinnerSlot = (courseType: string, dinnerSlotId: number | null, isComfirmed: Boolean, dinnerSlot: string | null) => {
+    const saveDinnerSlot = (date: string ,courseType: string, dinnerSlotId: number | null, isComfirmed: boolean, dinnerSlot: string) => {
         setSelectedDinnerSlots((prev) => [
-            ...prev.filter((selectedDinnerSlot) => 
-                selectedDinnerSlot.dinnerSlot.split("T")[0] !== dinnerSlot.split("T")[0]
+            ...prev.filter((selectedDinnerSlot) =>
+                selectedDinnerSlot.date !== date
             ),{
-                date: dinnerSlot.split("T")[0],
+                date: date,
                 courseType: courseType,
                 dinnerSlotId: dinnerSlotId,
                 isComfirmed: isComfirmed,
@@ -132,7 +130,6 @@ export default function Modal({
                 checkout: new Date(checkout),
                 dietaryRestrictions: (dietaryRestrictions),
                 comment: (comment),
-                isComfirmed: (isComfirmed),
                 selectedDinnerSlots: (selectedDinnerSlots)
             }),
         });
@@ -149,8 +146,7 @@ export default function Modal({
         getDays()
     }, [checkin, checkout]);
 
-
-
+    
     return(
     <div className={styles.modalOverlay}>
         <div className={styles.modal}>
@@ -345,8 +341,7 @@ export default function Modal({
                                             {i.dinnerSlots.filter((a) => a.dinnerStartAt.split("T")[1] !== "18:15").map((n) =>
                                                 <div 
                                                     key = {n.id}
-                                                    className = {styles.dinnerSlot}
-                                                >
+                                                    className = {styles.dinnerSlot}>
                                                     <label>
                                                         <input 
                                                             type="radio"
@@ -356,8 +351,8 @@ export default function Modal({
                                                                 selectedDinnerSlot.courseType === "FULL" && 
                                                                     selectedDinnerSlot.dinnerSlotId === n.id
                                                             )}
-                                                            onChange = {(e) => {
-                                                                saveDinnerSlot("FULL", n.id, true, n.dinnerStartAt)
+                                                            onChange = {() => {
+                                                                saveDinnerSlot(i.date, "FULL", n.id, true, n.dinnerStartAt)
                                                             }}
                                                         />{n.dinnerStartAt.split("T")[1]}
                                                     </label>
@@ -367,8 +362,12 @@ export default function Modal({
                                                 <input 
                                                     type='radio'
                                                     name = "dinnerSlot"
+                                                    checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
+                                                        selectedDinnerSlot.courseType == "FULL" &&
+                                                            selectedDinnerSlot.dinnerSlotId === null
+                                                    )}
                                                     onChange={() => 
-                                                        saveDinnerSlot("FULL", null, false, null)
+                                                        saveDinnerSlot(i.date, "FULL", null, false, "")
                                                     }
                                                 />時間未定
                                             </label>
@@ -392,12 +391,25 @@ export default function Modal({
                                                                     selectedDinnerSlot.dinnerSlotId === n.id
                                                             )}
                                                             onChange = {(e) => {
-                                                                saveDinnerSlot("HALF", n.id, true, n.dinnerStartAt)
+                                                                saveDinnerSlot(i.date, "HALF", n.id, true, n.dinnerStartAt)
                                                             }}
                                                         />{n.dinnerStartAt.split("T")[1]}
                                                     </label>
                                                 </div>
                                             )}
+                                            <label>
+                                                <input 
+                                                    type='radio'
+                                                    name = "dinnerSlot"
+                                                    checked = {selectedDinnerSlots.some((selectedDinnerSlot) =>
+                                                        selectedDinnerSlot.courseType == "HALF" &&
+                                                            selectedDinnerSlot.dinnerSlotId === null
+                                                    )}
+                                                    onChange={() => 
+                                                        saveDinnerSlot(i.date, "FULL", null, false, "")
+                                                    }
+                                                />時間未定
+                                            </label>
                                         </div>
                                     )}
                                     <div>
