@@ -20,22 +20,27 @@ export default function Home() {
 
 
   const getSchedule = async ()=> {
-    const data = await fetchSchedule(firstAndLastDays);
-    const formattedData = data.map((item: any) => ({
-      id: item.id,
-      dinnerStartAt: item.dinnerStartAt,
-    }));
-    const filteredData = formattedData.filter((item:any) => (
-      item.dinnerStartAt.split("T")[1] !== "18:15"
-    ));
-    const events = filteredData.map((item:any) => ({
-      start: item.dinnerStartAt
-    }));
-    setEvents(events)
+    if(firstAndLastDays.length === 2){
+      const data = await fetchSchedule(firstAndLastDays);
+      const formattedData = data.map((item: any) => ({
+        id: item.id,
+        dinnerStartAt: item.dinnerStartAt,
+      }));
+      const filteredData = formattedData.filter((item:any) => (
+        item.dinnerStartAt.split("T")[1] !== "18:15"
+      ));
+      const events = filteredData.map((item:any) => ({
+        start: item.dinnerStartAt
+      }));
+      setEvents(events)
+    }
   };
 
-
+  
   useEffect(() => {
+    if(firstAndLastDays.length !== 2){
+      return
+    }
     getSchedule()
   }, [firstAndLastDays]
   );

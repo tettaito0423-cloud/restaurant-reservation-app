@@ -95,7 +95,6 @@ export async function GET(req: Request){
         dinnerStartAt: japanTime,
       };
     });
-    console.log("result", result)
     return NextResponse.json(result);
   }
 }
