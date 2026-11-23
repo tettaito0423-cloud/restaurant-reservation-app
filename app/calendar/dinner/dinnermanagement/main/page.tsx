@@ -109,7 +109,7 @@ export default function Home() {
 
                   {dinnerSlotData.length > 0 &&(
                         <div>
-                              <div className={styles.table}>
+                              <div>
                                     <button
                                           onClick={()=>{setModalType('reservation')}}
                                     >
@@ -153,7 +153,7 @@ export default function Home() {
 
                                 
                                     {mealType === "both" &&(
-                                          <table>
+                                          <table className = {styles.table}>
                                                 <thead>
                                                       <tr>
                                                             <th>部屋番号</th>
@@ -182,10 +182,6 @@ export default function Home() {
                                                 </tbody>
                                           </table> 
                                     )}
-
-
-                                    {/*予約一覧*/}
-                                    <div className={styles.lists}></div>
                               </div>
                         </div>
 
