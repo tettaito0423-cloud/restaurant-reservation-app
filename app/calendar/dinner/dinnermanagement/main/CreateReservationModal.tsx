@@ -6,6 +6,22 @@ import {fetchSchedule, DinnerSlot} from '../../../../../lib/getTimetable'
 
 type Props = {
     date: string;
+    mode: "create" | "detail";
+    reservation?: {
+        id: number;
+        roomNumber: string;
+        adultCount: number;
+        childMealCount: number;
+        childNoMealCount: number;
+        checkin: string;
+        checkout: string;
+        dietaryRestrictions: string;
+        comment: string;
+        isComfirmed: boolean;
+        dinnerSlotId: number;
+        dinnerStartAt: string;
+        courseType: string;
+    };
     onClose: ()=> void;
 };
 
@@ -16,7 +32,9 @@ type DinnerSlotData = {
 
 
 export default function Modal({
+    mode,
     date,
+    reservation,
     onClose,
  }:Props){
     const [courseType, setCourseType] = useState<'FULL'|'HALF'|null>("FULL");
@@ -150,6 +168,8 @@ export default function Modal({
     return(
     <div className={styles.modalOverlay}>
         <div className={styles.modal}>
+
+            
             <div style ={{display: "flex", justifyContent: "space-between", marginBottom: "1%"}}>
                 <label>予約登録</label>
                 <button
@@ -161,6 +181,8 @@ export default function Modal({
                     X
                 </button>
             </div>
+
+
             <div className = {styles.stayInfo}>
                 <div className = {styles.Label}>
                     <label>宿泊情報</label>
